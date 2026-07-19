@@ -1,19 +1,32 @@
 """Sandcastle backend — FastAPI app.
 
-Phase 0 exposes health + config introspection. The session/build/stream/preview
-endpoints are added in Phase 1 (see plan.md).
+Exposes health + config introspection plus the Phase 1 core build loop:
+create a session, stream a build (SSE), browse generated files, and serve the
+live preview. See plan.md for the full roadmap.
 """
 from __future__ import annotations
+
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .api.routes import router as api_router
 from .config import settings
+from .sessions import manager
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    yield
+    await manager.shutdown()
+
 
 app = FastAPI(
     title="Sandcastle API",
     description="Live App Builder powered by GitHub Copilot Agents (Microsoft Agent Framework).",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -23,6 +36,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.include_router(api_router)
 
 
 @app.get("/api/health")
