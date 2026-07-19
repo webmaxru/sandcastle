@@ -1,63 +1,138 @@
 # 🏖️ Sandcastle
 
-**Describe an app. Watch a team of GitHub Copilot agents build, run, and debug it — live, in a sandbox.**
+### Describe an app. Watch a team of GitHub Copilot agents build, run, and self‑heal it — live, in a sandbox.
 
-Sandcastle is a showcase for the new [**GitHub Copilot provider for Microsoft Agent Framework**](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python). You type *"build me a ..."*, and a multi-agent team (**Planner → Builder → Fixer**) scaffolds a real app in an isolated sandbox, runs it, self-heals build/test errors, and streams a **live preview** you can keep iterating on conversationally.
+Sandcastle is a showcase for the new [**GitHub Copilot provider for Microsoft Agent Framework**](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python).
+You type *“build me a …”*, and a multi‑agent team — **Planner → Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self‑heals** its own build errors, grounds itself in live Microsoft Learn docs, and streams a **live preview** you keep iterating on by chat.
 
-> Status: 🚧 **Early development.** Phase 0 (foundations) is complete and verified — the agent runtime, backend skeleton, and container image are in place. Build loop, multi-agent orchestration, frontend, and deployment are in progress. See [`docs/architecture.md`](docs/architecture.md).
+<p align="center">
+  <img src="docs/media/demo-live-build.png" alt="Sandcastle building an app live: Planner and Builder lanes on the left, a green validation banner, and the generated app rendering in the live preview on the right" width="900">
+</p>
 
-## Why it's different
+<p align="center"><em>A real run: the Planner drafts a plan, the Builder writes the files, validation goes green, and the app renders in the live preview — all streamed as it happens.</em></p>
 
-Unlike a plain LLM call, the Copilot provider gives each agent a **real, sandboxed computer**:
+---
+
+## Why this is different
+
+A plain LLM call returns *text*. The Copilot provider gives each agent a **real, sandboxed computer** — and Sandcastle turns that into a spectator sport:
 
 | Capability | In Sandcastle |
 | --- | --- |
-| 🖥️ Shell execution | Agents `npm install`, build, and run your app |
-| 📁 File read/write | Agents scaffold the whole project; UI shows a live file tree |
-| 🌐 URL fetching | Pull assets/references from URLs you paste |
-| 🔌 MCP servers | Microsoft Learn MCP grounds scaffolding in current docs |
-| 🔴 Streaming | Live agent-activity feed as the app takes shape |
-| 🧠 Sessions | "Now add dark mode" — the agent edits the *same* app |
-| 👥 Multi-agent | Planner → Builder → Fixer team, streamed distinctly |
-| 📈 Observability | Built-in OpenTelemetry → Azure Monitor |
+| 🖥️ **Shell execution** | Agents run, build, and test the app they write |
+| 📁 **File read/write** | Agents scaffold the whole project; the UI shows a live file tree + source |
+| 🌐 **URL fetching** | Pull assets/references from a URL you paste |
+| 🔌 **MCP servers** | **Microsoft Learn MCP** grounds scaffolding in current docs |
+| 🔴 **Streaming** | A live activity feed — every tool call, per agent, as it happens |
+| 🧠 **Sessions / memory** | “Now add dark mode” edits the *same* app |
+| 👥 **Multi‑agent** | Planner → Builder → Fixer, each streamed in its own lane |
+| ♻️ **Self‑healing** | A real validator (`node --check` + asset checks) drives a Fixer loop until green |
+| 📈 **Observability** | Built‑in OpenTelemetry → Azure Application Insights |
 
-## Architecture (at a glance)
+**Why it goes viral:** the “wow” is visible in seconds and instantly shareable — an AI *team* that doesn’t just write code but **runs and debugs it in front of you**, then hands you a live, remixable app.
 
-```
-React/Vite SPA (Static Web Apps)  ──HTTPS/SSE──►  FastAPI (Container Apps)
-  prompt · activity feed ·                         GitHubCopilotAgent team
-  file tree · live preview                         per-session sandbox · MCP · OTel
-```
+## How it works
 
-- **Backend** (`backend/`): FastAPI + `agent-framework-github-copilot`. Ships Node 22 + `@github/copilot` in the container.
-- **Frontend** (`frontend/`): React + Vite SPA _(coming next)_.
-- **Infra** (`infra/`): Azure Static Web Apps + Container Apps, free tiers _(coming next)_.
+```mermaid
+flowchart LR
+  U["You: build me a …"] --> P
 
-## Run the backend locally
+  subgraph Team["One sandbox · one CopilotClient · shared workspace"]
+    direction LR
+    P["🧭 Planner<br/>drafts the plan"] --> B["🔨 Builder<br/>writes the files"]
+    B --> V{"✅ Validate<br/>node --check + assets"}
+    V -- issues --> F["🩹 Fixer<br/>edits in place"]
+    F --> V
+  end
 
-Prerequisites: **Python 3.12**, **Node.js 22+**, and the **GitHub Copilot CLI** logged in (`copilot` then `/login`), or a fine-grained PAT with the *Copilot Requests* permission.
-
-```powershell
-cd backend
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt   # add --pre if not pinned
-copy .env.example .env                                          # optional: configure model/BYOK
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
-```
-
-Then open http://127.0.0.1:8000/api/health.
-
-Verify the agent runtime end-to-end:
-
-```powershell
-.\.venv\Scripts\python.exe smoke_test.py   # prints "Sandcastle smoke test OK"
+  V -- green --> Prev["🌐 Live preview iframe"]
+  P -. "🔎 grounding" .-> L[("Microsoft Learn MCP")]
+  B -. "🔎 grounding" .-> L
+  Team -. traces .-> O[("App Insights · OTel")]
 ```
 
-## Auth modes
+Each session gets its **own scratch workspace and `CopilotClient`**; the three personas share it and run sequentially so every tool/text delta streams live, tagged by agent. The Builder keeps an `AgentSession` for conversational iteration. Self‑healing is driven by a **real signal**, not vibes: inline/local JS is run through `node --check`, referenced assets must exist, and there must be a runnable `index.html`.
 
-- **Local-first** — use your own Copilot login or `COPILOT_GITHUB_TOKEN` (fine-grained PAT, *Copilot Requests*).
-- **Hosted demo (BYOK)** — point the CLI at your own model provider via `COPILOT_PROVIDER_BASE_URL` + `COPILOT_PROVIDER_API_KEY` (e.g. Azure OpenAI), so no Copilot seat is shared. (GitHub Copilot is licensed per user.)
+<p align="center">
+  <img src="docs/media/home.png" alt="Sandcastle home screen with an example gallery and a live-preview panel" width="820">
+</p>
+
+## Quickstart — run it locally
+
+**One command** (Docker):
+
+```bash
+docker compose up --build
+# open http://localhost:5173
+```
+
+Provide Copilot auth via a local `.env` (`COPILOT_GITHUB_TOKEN=github_pat_…`, a fine‑grained PAT with the *Copilot Requests* permission) **or** log in once inside the container:
+`docker compose exec backend copilot` → `/login`. See [`backend/.env.example`](backend/.env.example).
+
+<details>
+<summary><strong>Prefer a Dev Container or manual setup?</strong></summary>
+
+**Dev Container:** open the repo in VS Code → *Reopen in Container* (`.devcontainer/`), then:
+
+```bash
+PYTHONPATH=. uvicorn backend.app.main:app --port 8099   # backend
+npm --prefix frontend run dev                            # frontend (proxies /api)
+```
+
+**Manual:** Python 3.12 + Node 22 + the [`@github/copilot`](https://www.npmjs.com/package/@github/copilot) CLI logged in.
+
+```bash
+python -m venv backend/.venv
+backend/.venv/bin/pip install -r backend/requirements.txt
+PYTHONPATH=. backend/.venv/bin/uvicorn backend.app.main:app --port 8099
+npm --prefix frontend ci && npm --prefix frontend run dev
+```
+</details>
+
+## Deploy your own (Azure free tiers)
+
+Sandcastle deploys to **Azure Static Web Apps (Free)** + **Azure Container Apps (free grant)** with **no paid container registry** — the backend image lives in public GitHub Container Registry.
+
+```bash
+az group create -n rg-sandcastle -l eastus2
+az deployment group create -g rg-sandcastle -f infra/main.bicep \
+  -p providerBaseUrl="https://<your-aoai>.openai.azure.com/openai/v1" providerApiKey="<key>"
+```
+
+Then wire up **deploy‑on‑push** with the included GitHub Actions workflow. Full walkthrough (secrets, OIDC, variables): **[`docs/deploy.md`](docs/deploy.md)**.
+
+## Auth & compliance
+
+- **Local‑first** — your own Copilot login or `COPILOT_GITHUB_TOKEN` (fine‑grained PAT, *Copilot Requests*). Fully compliant — each developer uses their own seat.
+- **Hosted demo (BYOK)** — point the CLI at *your own* model provider via `COPILOT_PROVIDER_BASE_URL` + `COPILOT_PROVIDER_API_KEY` (e.g. Azure OpenAI). GitHub Copilot is licensed per user, so the public demo runs on your BYOK keys, rate‑limited and sandboxed — it never resells a Copilot seat.
+
+## Tech stack
+
+**Backend** — FastAPI · `agent-framework-github-copilot` · SSE streaming · OpenTelemetry · Docker (Node 22 + `@github/copilot`).
+**Frontend** — React 19 · Vite · TypeScript.
+**Infra** — Azure Static Web Apps + Container Apps + Application Insights, all free‑tier, via Bicep + GitHub Actions.
+
+## Repo structure
+
+```
+backend/     FastAPI app: api · sessions · agents (planner/builder/fixer) · validation · observability
+frontend/    React + Vite SPA: activity feed · file tree · live preview · example gallery
+infra/       main.bicep — SWA + ACA + App Insights (free tiers)
+.github/     deploy-on-push + CI workflows
+docs/        architecture · deploy guide · launch kit · media
+docker-compose.yml · .devcontainer/   one-command / zero-setup local run
+```
+
+## Documentation
+
+- [Architecture](docs/architecture.md) — verified provider API, streaming schema, orchestration, hardening.
+- [Deploy guide](docs/deploy.md) — provisioning, CI/CD, OIDC, local run.
+- [Launch kit](docs/launch.md) — demo script + social copy.
+
+## Acknowledgements
+
+Built on [Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/) and the [GitHub Copilot CLI](https://github.com/github/copilot-cli). Not an official Microsoft or GitHub product.
 
 ## License
 
-TBD.
+MIT — see [`LICENSE`](LICENSE).

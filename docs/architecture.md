@@ -1,7 +1,7 @@
 # Sandcastle — Architecture
 
 > Companion to the implementation plan. This doc captures the *verified* technical design
-> after Phase 0. Deep rationale and the phase-by-phase roadmap live in the session plan.
+> after Phase 7 (feature-complete). Deep rationale and the phase-by-phase roadmap live in the session plan.
 
 ## Concept
 
@@ -109,6 +109,34 @@ timeouts, rate limits, concurrency caps, output caps, workdir cleanup. Hardening
 **Azure Container Apps Dynamic Sessions** (Hyper-V isolated) or the CLI's native
 `/sandbox enable` / `--cloud`.
 
+## Observability (Phase 5)
+
+`app/observability.py` calls Agent Framework's `configure_otel_providers()` once at startup, so
+every agent invocation, tool call, and model request is traced automatically (spans carry
+`gen_ai.*` attributes incl. token usage). **Exporter auto-selection** (first match wins): Azure
+**Application Insights** (`APPLICATIONINSIGHTS_CONNECTION_STRING`, free tier) → **OTLP**
+(`OTEL_EXPORTER_OTLP_ENDPOINT`) → **console** (`SANDCASTLE_OTEL_CONSOLE`, dev) → **disabled**
+(default). Every path is defensive; sensitive telemetry is off by default. Status is exposed at
+`/api/observability` and reflected by an OTEL chip in the UI.
+
+## Hardening (Phase 6)
+
+The hosted demo runs the agent with `approve_all`, so it is throttled (off by default for the
+local repo): a per-client sliding-window **rate limiter** (`app/ratelimit.py`, `X-Forwarded-For`
+aware) returns **429 + `Retry-After`** on `POST /sessions` (per hour) and `/build` (per minute);
+SSE frames truncate oversized fields with a total-event cap; the file endpoint enforces a max
+byte size + `nosniff`. The container runs **non-root**. Tunables: `SANDCASTLE_RATELIMIT`,
+`SANDCASTLE_RATE_*`, `SANDCASTLE_MAX_*`.
+
+## Deployment (Phase 7)
+
+`infra/main.bicep` provisions, on **Azure free tiers only** (no paid ACR): Log Analytics +
+Application Insights + a Container Apps environment & app (public **ghcr.io** image; **single
+replica** so the in-memory session map + rate limiter stay correct; scale-to-zero) + a **Static
+Web App (Free)**. `.github/workflows/deploy.yml` ships on push to `main` (ghcr build/push → OIDC
+`az containerapp update` → frontend build → `static-web-apps-deploy`). One-command local run via
+`docker compose up` or the Dev Container. Full guide: [`deploy.md`](deploy.md).
+
 ## Status
 
 - ✅ **Phase 0** — foundations: backend skeleton, venv + deps, container image, agent smoke
@@ -119,4 +147,13 @@ timeouts, rate limits, concurrency caps, output caps, workdir cleanup. Hardening
   E2E verified (two-turn build+iterate; real Fixer repairs a broken app to green).
 - ✅ **Phase 3** — MCP grounding: Microsoft Learn HTTP MCP wired into all agents. E2E verified
   (a Dynamic Sessions cheat-sheet build made 8 Microsoft Learn lookups; grounded content, green).
-- ⏭️ **Phase 4** — polished React/Vite frontend (activity feed, file tree, live preview, share).
+- ✅ **Phase 4** — polished React/Vite frontend (activity feed with agent lanes, file tree + code
+  viewer, live preview iframe, example gallery, share/remix). Verified via a full live build
+  through the real UI (headless render + preview iframe rendering the generated app; 0 errors).
+- ✅ **Phase 5** — observability: OpenTelemetry → App Insights/OTLP/console. Verified real
+  `invoke_agent` spans with token-usage metrics.
+- ✅ **Phase 6** — hardening: rate limiting, output caps, file guards, non-root. Verified via
+  unit + HTTP integration tests.
+- ✅ **Phase 7** — deploy & CI/CD: Bicep (SWA + ACA free) + GitHub Actions deploy-on-push + local
+  compose/devcontainer. Verified bicep build, YAML, and a non-root backend container serving.
+- ⏭️ **Phase 8** — docs & launch (README + screenshots + launch kit).
