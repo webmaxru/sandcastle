@@ -4,12 +4,15 @@ from __future__ import annotations
 from typing import Any
 
 # Tool argument keys safe/useful to surface (avoids streaming large file bodies).
-_SUMMARY_KEYS = ("path", "command", "cmd", "url", "file_path", "filename")
+_SUMMARY_KEYS = ("path", "command", "cmd", "url", "file_path", "filename", "query", "question")
 
 
 def tool_summary(tool: str, args: dict[str, Any] | None) -> str:
     args = args or {}
     tool_l = (tool or "").lower()
+    if "microsoft-learn" in tool_l or "microsoft_docs" in tool_l:
+        q = args.get("query") or args.get("question") or args.get("url") or ""
+        return f"Microsoft Learn: {q}" if q else "Microsoft Learn lookup"
     if any(k in tool_l for k in ("shell", "bash", "run", "exec")):
         return "$ " + str(args.get("command") or args.get("cmd") or "")
     for k in ("path", "file_path", "filename", "url"):

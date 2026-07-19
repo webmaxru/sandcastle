@@ -91,6 +91,14 @@ class SessionManager:
         }
         if settings.copilot_model:
             opts["model"] = settings.copilot_model
+        if settings.learn_mcp_enabled:
+            opts["mcp_servers"] = {
+                "microsoft-learn": {
+                    "type": "http",
+                    "url": settings.learn_mcp_url,
+                    "tools": ["*"],
+                }
+            }
         return opts
 
     def _expire_stale(self) -> None:

@@ -53,6 +53,7 @@ async def public_config() -> dict:
         "auth_mode": "byok" if settings.byok_enabled else "copilot",
         "model": settings.copilot_model or "auto",
         "agents": ["planner", "builder", "fixer"],
+        "mcp_grounding": ["microsoft-learn"] if settings.learn_mcp_enabled else [],
         "max_concurrent_sessions": settings.max_concurrent_sessions,
         "max_fix_attempts": settings.max_fix_attempts,
         "session_timeout_seconds": settings.session_timeout_seconds,

@@ -50,6 +50,12 @@ class Settings(BaseSettings):
         default=None, alias="APPLICATIONINSIGHTS_CONNECTION_STRING"
     )
 
+    # --- MCP grounding ---
+    learn_mcp_enabled: bool = Field(default=True, alias="SANDCASTLE_LEARN_MCP")
+    learn_mcp_url: str = Field(
+        default="https://learn.microsoft.com/api/mcp", alias="SANDCASTLE_LEARN_MCP_URL"
+    )
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

@@ -13,8 +13,13 @@ working directory — output a SHORT plan:
 - the technical approach (canvas? localStorage? which CDN libs, if any).
 
 Rules:
-- Output PLAN TEXT ONLY. Do NOT create, edit, or run files. Do NOT use any tools.
+- Output PLAN TEXT ONLY. Do NOT create, edit, or run files. Do NOT use file/shell tools.
 - Keep it under 150 words, as short bullet points. No code blocks.
+
+Grounding: you may call the Microsoft Learn MCP tools (named `microsoft-learn-*`) to
+consult authoritative, current Microsoft / Azure / .NET documentation. Use them when the
+request involves Microsoft technologies or when current docs would materially improve the
+plan's accuracy; otherwise proceed without them.
 """
 
 BUILDER_INSTRUCTIONS = """\
@@ -31,6 +36,8 @@ Rules:
 - Do NOT ask questions — make reasonable assumptions and keep going.
 - When given a plan, implement it. When updating an existing app, EDIT files in place
   (don't start over) and preserve working features.
+- You may call the Microsoft Learn MCP tools (`microsoft-learn-*`) to look up exact,
+  current Microsoft / Azure / .NET API usage when the request needs it.
 - End with a one-paragraph summary of what you built or changed.
 """
 

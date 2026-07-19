@@ -117,4 +117,6 @@ timeouts, rate limits, concurrency caps, output caps, workdir cleanup. Hardening
   (build a Snake game → live canvas preview).
 - ✅ **Phase 2** — multi-agent Planner→Builder→Fixer + self-healing; conversational iteration.
   E2E verified (two-turn build+iterate; real Fixer repairs a broken app to green).
-- ⏭️ **Phase 3** — MCP grounding (Microsoft Learn HTTP MCP).
+- ✅ **Phase 3** — MCP grounding: Microsoft Learn HTTP MCP wired into all agents. E2E verified
+  (a Dynamic Sessions cheat-sheet build made 8 Microsoft Learn lookups; grounded content, green).
+- ⏭️ **Phase 4** — polished React/Vite frontend (activity feed, file tree, live preview, share).
