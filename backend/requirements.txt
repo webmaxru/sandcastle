@@ -10,3 +10,8 @@ sse-starlette
 pydantic-settings
 python-dotenv
 httpx
+
+# Observability (Phase 5): Azure Application Insights exporter for the
+# OpenTelemetry traces/metrics/logs emitted by Agent Framework. Only used when
+# APPLICATIONINSIGHTS_CONNECTION_STRING is set; harmless otherwise.
+azure-monitor-opentelemetry-exporter

@@ -13,11 +13,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .api.routes import router as api_router
 from .config import settings
+from .observability import observability_state, setup_observability
 from .sessions import manager
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    setup_observability()
     yield
     await manager.shutdown()
 
@@ -57,5 +59,11 @@ async def public_config() -> dict:
         "max_concurrent_sessions": settings.max_concurrent_sessions,
         "max_fix_attempts": settings.max_fix_attempts,
         "session_timeout_seconds": settings.session_timeout_seconds,
-        "observability": bool(settings.app_insights_conn),
+        "observability": bool(observability_state()["enabled"]),
     }
+
+
+@app.get("/api/observability")
+async def observability_info() -> dict:
+    """Live observability status (which exporter, if any, is active)."""
+    return observability_state()

@@ -49,6 +49,7 @@ class Settings(BaseSettings):
     app_insights_conn: str | None = Field(
         default=None, alias="APPLICATIONINSIGHTS_CONNECTION_STRING"
     )
+    otel_console: bool = Field(default=False, alias="SANDCASTLE_OTEL_CONSOLE")
 
     # --- MCP grounding ---
     learn_mcp_enabled: bool = Field(default=True, alias="SANDCASTLE_LEARN_MCP")

@@ -149,6 +149,7 @@ export default function App() {
                 on={config.mcp_grounding.length > 0}
               />
               <Chip label="self-heal" value={`${config.max_fix_attempts}×`} />
+              {config.observability && <Chip label="otel" value="App Insights" on />}
             </>
           )}
         </div>
