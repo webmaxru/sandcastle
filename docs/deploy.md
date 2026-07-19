@@ -19,18 +19,30 @@ free — so there is **no paid Azure Container Registry** in the loop.
 # Pick a region that offers the Static Web Apps Free SKU (eastus2, westus2, centralus, westeurope, eastasia).
 az group create -n rg-sandcastle -l eastus2
 
+# Free & seat-free: BYOK on the GitHub Models endpoint (github token needs Models access).
 az deployment group create \
   -g rg-sandcastle \
   -f infra/main.bicep \
   -p namePrefix=sandcastle \
      swaLocation=eastus2 \
-     providerBaseUrl="https://<your-aoai>.openai.azure.com/openai/v1" \
-     providerApiKey="<azure-openai-key>"
+     providerBaseUrl="https://models.github.ai/inference" \
+     providerApiKey="<github-token>" \
+     providerModel="openai/gpt-4o-mini"
+
+# Stronger public demo: Azure OpenAI (paid) — provide the host URL and a deployment name.
+#   providerType=azure \
+#   providerBaseUrl="https://<your-aoai>.openai.azure.com" \
+#   providerApiKey="<azure-openai-key>" providerModel="<deployment-name>"
 ```
 
-> **Auth model.** The hosted demo uses **BYOK** (`providerBaseUrl` + `providerApiKey`,
-> e.g. Azure OpenAI) so it never resells a GitHub Copilot seat. Alternatively pass
-> `githubToken=<fine-grained PAT with "Copilot Requests">` to run in Copilot-model mode.
+> **Auth model.** GitHub Copilot is **licensed per user**, so the hosted demo runs **BYOK** — model
+> requests go to *your own* OpenAI‑compatible provider and **never touch a Copilot seat**. BYOK is
+> activated by `providerBaseUrl` and **requires an explicit model** (`providerModel` → `COPILOT_MODEL`;
+> the CLI exits with *"BYOK providers require an explicit model"* otherwise). GitHub auth is not needed
+> for model requests. The free **GitHub Models** endpoint is the zero‑cost option (rate‑limited);
+> **Azure OpenAI** (`providerType=azure`) is recommended for a robust public demo. Alternatively pass
+> `githubToken=<fine-grained PAT with "Copilot Requests">` to run in Copilot‑model mode (uses that
+> account's seat — fine for a private/personal instance, not a public one).
 
 Note the deployment outputs — you'll need them below:
 

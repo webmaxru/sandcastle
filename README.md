@@ -5,6 +5,7 @@
 **▶️ Live demo: https://mango-island-0bf66000f.7.azurestaticapps.net** &nbsp;·&nbsp; running on Azure free tiers (Static Web Apps + Container Apps).
 
 > The public demo runs on a scale‑to‑zero backend — the **first request may take ~20–30s** to cold‑start the agent runtime, then it's fast.
+> Model inference is **BYOK on the free [GitHub Models](https://github.com/marketplace/models) endpoint** — so the demo **never consumes a GitHub Copilot seat**. It's rate‑limited; heavy traffic may hit GitHub Models' free‑tier limits.
 
 Sandcastle is a showcase for the new [**GitHub Copilot provider for Microsoft Agent Framework**](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python).
 You type *“build me a …”*, and a multi‑agent team — **Planner → Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self‑heals** its own build errors, grounds itself in live Microsoft Learn docs, and streams a **live preview** you keep iterating on by chat.
@@ -107,8 +108,14 @@ Then wire up **deploy‑on‑push** with the included GitHub Actions workflow. F
 
 ## Auth & compliance
 
-- **Local‑first** — your own Copilot login or `COPILOT_GITHUB_TOKEN` (fine‑grained PAT, *Copilot Requests*). Fully compliant — each developer uses their own seat.
-- **Hosted demo (BYOK)** — point the CLI at *your own* model provider via `COPILOT_PROVIDER_BASE_URL` + `COPILOT_PROVIDER_API_KEY` (e.g. Azure OpenAI). GitHub Copilot is licensed per user, so the public demo runs on your BYOK keys, rate‑limited and sandboxed — it never resells a Copilot seat.
+GitHub Copilot is **licensed per user**, so a public multi‑user demo must **not** serve output from one person's Copilot seat. Sandcastle supports two modes:
+
+- **Local‑first (your own seat)** — run it on your machine with your own Copilot login or `COPILOT_GITHUB_TOKEN` (fine‑grained PAT, *Copilot Requests*). Fully compliant — each developer uses their **own** seat, and you get Copilot's strongest models.
+- **Hosted demo (BYOK)** — point the CLI at *your own* OpenAI‑compatible model provider so it **never touches a Copilot seat**. BYOK is activated by `COPILOT_PROVIDER_BASE_URL` and requires an explicit model (`GITHUB_COPILOT_MODEL`). GitHub auth is *not* required for model requests — the agentic runtime (shell/file/URL/MCP tools) still runs.
+  - **This live demo** uses the **free [GitHub Models](https://github.com/marketplace/models) endpoint** (`https://models.github.ai/inference`, model `openai/gpt-4o-mini`) — free and seat‑free, but rate‑limited and best for lighter apps.
+  - **For a robust public demo**, use **Azure OpenAI** (`COPILOT_PROVIDER_TYPE=azure`) or another paid provider — stronger models and higher limits (small pay‑as‑you‑go cost). See [`docs/deploy.md`](docs/deploy.md).
+
+The hosted demo is also **rate‑limited, concurrency‑capped, timed‑out, and runs non‑root** with ephemeral per‑session workdirs.
 
 ## Tech stack
 

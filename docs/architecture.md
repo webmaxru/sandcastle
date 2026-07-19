@@ -48,9 +48,14 @@ conversationally. It showcases the GitHub Copilot provider for Microsoft Agent F
   OS keychain (OAuth) → `gh auth token`.
 - Token types: fine-grained PAT (personal, **Copilot Requests** permission), GitHub App
   user-to-server (`ghu_`), OAuth (`gho_`). **Classic PAT (`ghp_`) not supported.**
-- **BYOK**: `COPILOT_PROVIDER_BASE_URL` + `COPILOT_PROVIDER_API_KEY` → no GitHub auth required
-  for model requests; the agentic runtime (shell/file/URL) still works. This is the
-  ToS-compliant path for the public hosted demo (Copilot is licensed per user).
+- **BYOK** (activated by `COPILOT_PROVIDER_BASE_URL`): model requests route to your own
+  OpenAI-compatible provider — **no GitHub auth required** — while the agentic runtime
+  (shell/file/URL/MCP) still works. Two non-obvious requirements: (1) the CLI needs an
+  **explicit model at startup** (`COPILOT_MODEL`, set from `GITHUB_COPILOT_MODEL`), and
+  (2) each session must be created **with a `provider` config** (base_url + api_key/bearer +
+  model), not just the process env. `sessions.py` handles both. This is the ToS-compliant path
+  for the public hosted demo (Copilot is licensed per user). The live demo uses the **free
+  GitHub Models** endpoint; Azure OpenAI (`COPILOT_PROVIDER_TYPE=azure`) is the paid, higher-limit option.
 
 ## Backend API & streaming events (Phases 1–2)
 

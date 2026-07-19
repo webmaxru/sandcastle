@@ -35,3 +35,6 @@ apm_modules/
 # Azure
 .azure/
 
+
+# Compiled Bicep artifact (build from infra/main.bicep)
+infra/main.json

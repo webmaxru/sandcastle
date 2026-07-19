@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import os
 import pathlib
 import shutil
 import time
@@ -74,10 +75,30 @@ class SessionManager:
             "log_level": "error",
         }
         if settings.byok_enabled:
-            kwargs["env"] = {
-                "COPILOT_PROVIDER_BASE_URL": settings.provider_base_url or "",
-                "COPILOT_PROVIDER_API_KEY": settings.provider_api_key or "",
+            # BYOK: route model requests to the owner's own OpenAI-compatible provider.
+            # `env` REPLACES the CLI's environment, so start from os.environ (PATH,
+            # COPILOT_HOME, …) and layer the provider config on top. A model is
+            # REQUIRED at CLI startup via COPILOT_MODEL, else the CLI exits with
+            # "BYOK providers require an explicit model".
+            byok_env: dict[str, str] = {
+                k: v for k, v in os.environ.items()
+                # drop any GitHub creds so BYOK isn't shadowed by Copilot-seat auth
+                if k not in ("COPILOT_GITHUB_TOKEN", "GH_TOKEN", "GITHUB_TOKEN")
             }
+            byok_env["COPILOT_PROVIDER_BASE_URL"] = settings.provider_base_url or ""
+            byok_env["COPILOT_PROVIDER_TYPE"] = settings.provider_type or "openai"
+            if settings.provider_bearer_token:
+                byok_env["COPILOT_PROVIDER_BEARER_TOKEN"] = settings.provider_bearer_token
+            elif settings.provider_api_key:
+                byok_env["COPILOT_PROVIDER_API_KEY"] = settings.provider_api_key
+            if settings.byok_model:
+                byok_env["COPILOT_MODEL"] = settings.byok_model
+            if settings.provider_model_id:
+                byok_env["COPILOT_PROVIDER_MODEL_ID"] = settings.provider_model_id
+            if settings.provider_wire_model:
+                byok_env["COPILOT_PROVIDER_WIRE_MODEL"] = settings.provider_wire_model
+            kwargs["env"] = byok_env
+            kwargs["use_logged_in_user"] = False
         elif settings.github_token:
             kwargs["github_token"] = settings.github_token
         else:
@@ -91,6 +112,24 @@ class SessionManager:
         }
         if settings.copilot_model:
             opts["model"] = settings.copilot_model
+        if settings.byok_enabled:
+            # Each Copilot session must be created WITH a custom provider (or auth);
+            # process-level BYOK env alone isn't enough for the session RPC.
+            provider: dict[str, Any] = {
+                "type": settings.provider_type or "openai",
+                "base_url": settings.provider_base_url,
+            }
+            if settings.provider_bearer_token:
+                provider["bearer_token"] = settings.provider_bearer_token
+            elif settings.provider_api_key:
+                provider["api_key"] = settings.provider_api_key
+            model_id = settings.provider_model_id or settings.byok_model
+            wire_model = settings.provider_wire_model or settings.byok_model
+            if model_id:
+                provider["model_id"] = model_id
+            if wire_model:
+                provider["wire_model"] = wire_model
+            opts["provider"] = provider
         if settings.learn_mcp_enabled:
             opts["mcp_servers"] = {
                 "microsoft-learn": {

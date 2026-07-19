@@ -36,7 +36,7 @@ The one‑line hook: **“I gave a team of GitHub Copilot agents a sandbox and t
 - **“Is it just prompting an LLM?”** No — the Copilot provider spawns a real Copilot CLI runtime with **shell + file + MCP** tools. The agents *execute* what they write; the Fixer loop is driven by a **real validator** (`node --check` + asset checks), not by asking the model “are you sure?”.
 - **“Why three agents?”** Separation of concerns makes the stream legible and the self‑heal loop tight — you can *see* which agent is doing what, in its own lane.
 - **“How is it grounded?”** The **Microsoft Learn MCP** (remote HTTP) is wired into every agent, so Microsoft/Azure/.NET scaffolding cites current docs instead of stale training data.
-- **“Is the hosted demo abusing Copilot seats?”** No. The public demo runs **BYOK** (your own model provider via `COPILOT_PROVIDER_*`), rate‑limited and sandboxed. The local‑first repo uses each developer’s **own** Copilot login — fully compliant.
+- **“Is the hosted demo abusing Copilot seats?”** No. The public demo runs **BYOK** on the **free GitHub Models endpoint** (`COPILOT_PROVIDER_BASE_URL` → `models.github.ai`, model `openai/gpt-4o-mini`), so it **never consumes a Copilot seat** — it's rate‑limited and sandboxed. The local‑first repo uses each developer’s **own** Copilot login — fully compliant. For a stronger public demo, swap in Azure OpenAI (paid) via `COPILOT_PROVIDER_TYPE=azure`.
 - **“What does it cost to run?”** Azure **Static Web Apps (Free)** + **Container Apps (free grant)** + **Application Insights** free tier, and the backend image is in **public ghcr.io** — no paid registry.
 - **“Can I self‑host?”** Yes: `docker compose up --build`, or one Bicep deploy. See [`deploy.md`](deploy.md).
 

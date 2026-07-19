@@ -30,8 +30,14 @@ class Settings(BaseSettings):
     copilot_timeout: int = Field(default=300, alias="GITHUB_COPILOT_TIMEOUT")
 
     # --- BYOK (hosted demo, ToS-compliant) ---
+    # BYOK is activated by COPILOT_PROVIDER_BASE_URL alone (GitHub auth not required).
+    # A model is REQUIRED at CLI startup — set GITHUB_COPILOT_MODEL (or provider_wire_model).
     provider_base_url: str | None = Field(default=None, alias="COPILOT_PROVIDER_BASE_URL")
     provider_api_key: str | None = Field(default=None, alias="COPILOT_PROVIDER_API_KEY")
+    provider_type: str = Field(default="openai", alias="COPILOT_PROVIDER_TYPE")
+    provider_bearer_token: str | None = Field(default=None, alias="COPILOT_PROVIDER_BEARER_TOKEN")
+    provider_model_id: str | None = Field(default=None, alias="COPILOT_PROVIDER_MODEL_ID")
+    provider_wire_model: str | None = Field(default=None, alias="COPILOT_PROVIDER_WIRE_MODEL")
 
     # --- GitHub auth (local-first) ---
     github_token: str | None = Field(default=None, alias="COPILOT_GITHUB_TOKEN")
@@ -71,7 +77,14 @@ class Settings(BaseSettings):
 
     @property
     def byok_enabled(self) -> bool:
-        return bool(self.provider_base_url and self.provider_api_key)
+        # BYOK is activated by the provider base URL alone (per `copilot help providers`);
+        # the API key is optional for some providers (e.g. local Ollama).
+        return bool(self.provider_base_url)
+
+    @property
+    def byok_model(self) -> str | None:
+        # The model the CLI needs at startup for BYOK (COPILOT_MODEL).
+        return self.copilot_model or self.provider_wire_model or self.provider_model_id
 
 
 settings = Settings()

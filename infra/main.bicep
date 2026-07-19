@@ -10,8 +10,12 @@
 //   az group create -n rg-sandcastle -l eastus2
 //   az deployment group create -g rg-sandcastle -f infra/main.bicep \
 //     -p backendImage=ghcr.io/<owner>/<repo>-backend:latest \
-//        providerBaseUrl=https://<resource>.openai.azure.com/openai/v1 \
-//        providerApiKey=<azure-openai-key>
+//        providerBaseUrl=https://models.github.ai/inference \   // free GitHub Models (BYOK, no Copilot seat)
+//        providerApiKey=<github-token-with-models-access> \
+//        providerModel=openai/gpt-4o-mini
+//   # For a stronger public demo use Azure OpenAI instead:
+//   #    providerType=azure providerBaseUrl=https://<resource>.openai.azure.com \
+//   #    providerApiKey=<key> providerModel=<deployment-name>
 //
 // The GitHub Actions workflow later swaps in the freshly built image tag and
 // deploys the frontend build to the Static Web App.
@@ -41,6 +45,12 @@ param providerBaseUrl string = ''
 @description('BYOK model provider API key. Stored as a Container App secret.')
 @secure()
 param providerApiKey string = ''
+
+@description('BYOK provider type: "openai" (default, works for any OpenAI-compatible endpoint incl. GitHub Models), "azure", or "anthropic".')
+param providerType string = 'openai'
+
+@description('BYOK model name — REQUIRED for BYOK (the CLI needs it at startup). E.g. "openai/gpt-4o-mini" for GitHub Models, or your Azure OpenAI deployment/model.')
+param providerModel string = ''
 
 @description('Optional GitHub token (fine-grained PAT with "Copilot Requests") for Copilot-model mode.')
 @secure()
@@ -116,6 +126,8 @@ var baseEnv = [
 var containerEnv = concat(
   baseEnv,
   empty(providerBaseUrl) ? [] : [ { name: 'COPILOT_PROVIDER_BASE_URL', value: providerBaseUrl } ],
+  empty(providerBaseUrl) ? [] : [ { name: 'COPILOT_PROVIDER_TYPE', value: providerType } ],
+  empty(providerModel) ? [] : [ { name: 'GITHUB_COPILOT_MODEL', value: providerModel } ],
   empty(providerApiKey) ? [] : [ { name: 'COPILOT_PROVIDER_API_KEY', secretRef: 'provider-api-key' } ],
   empty(githubToken) ? [] : [ { name: 'COPILOT_GITHUB_TOKEN', secretRef: 'github-token' } ]
 )

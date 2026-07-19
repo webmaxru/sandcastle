@@ -62,7 +62,8 @@ python backend/scripts/e2e_http.py              # end-to-end build via the API
 
 - Python 3.12 · Node 22 · the [`@github/copilot`](https://www.npmjs.com/package/@github/copilot) CLI.
 - Auth: `COPILOT_GITHUB_TOKEN` (fine‑grained PAT, *Copilot Requests*) or an interactive `/login`;
-  BYOK via `COPILOT_PROVIDER_BASE_URL` + `COPILOT_PROVIDER_API_KEY`. See `backend/.env.example`.
+  BYOK via `COPILOT_PROVIDER_BASE_URL` + `GITHUB_COPILOT_MODEL` (model is **required** for BYOK) +
+  `COPILOT_PROVIDER_API_KEY`. See `backend/.env.example`.
 
 ## Ship it
 
