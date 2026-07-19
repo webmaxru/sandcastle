@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     sessions_root: str = Field(default="./.sessions", alias="SANDCASTLE_SESSIONS_ROOT")
     max_concurrent_sessions: int = Field(default=3, alias="SANDCASTLE_MAX_SESSIONS")
     session_timeout_seconds: int = Field(default=600, alias="SANDCASTLE_SESSION_TIMEOUT")
+    max_fix_attempts: int = Field(default=2, alias="SANDCASTLE_MAX_FIX_ATTEMPTS")
 
     # --- Web ---
     cors_origins: str = Field(default="*", alias="SANDCASTLE_CORS_ORIGINS")

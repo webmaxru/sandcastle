@@ -52,7 +52,9 @@ async def public_config() -> dict:
     return {
         "auth_mode": "byok" if settings.byok_enabled else "copilot",
         "model": settings.copilot_model or "auto",
+        "agents": ["planner", "builder", "fixer"],
         "max_concurrent_sessions": settings.max_concurrent_sessions,
+        "max_fix_attempts": settings.max_fix_attempts,
         "session_timeout_seconds": settings.session_timeout_seconds,
         "observability": bool(settings.app_insights_conn),
     }

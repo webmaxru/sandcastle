@@ -52,6 +52,50 @@ conversationally. It showcases the GitHub Copilot provider for Microsoft Agent F
   for model requests; the agentic runtime (shell/file/URL) still works. This is the
   ToS-compliant path for the public hosted demo (Copilot is licensed per user).
 
+## Backend API & streaming events (Phases 1–2)
+
+Endpoints (all under `/api`):
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `POST` | `/sessions` | Create a session → `{id, preview}`. Spins up a per-session sandbox + agent team. |
+| `POST` | `/sessions/{id}/build` | Send a build/iterate prompt. Returns an **SSE** stream of activity events. |
+| `GET` | `/sessions/{id}/files` | List generated files (`path`, `size`). |
+| `GET` | `/sessions/{id}/files/{path}` | Read a text file's contents. |
+| `GET` | `/preview/{id}/{path}` | Serve the built static app (default `index.html`) for the iframe. Path-traversal guarded. |
+| `DELETE` | `/sessions/{id}` | Stop the agents and delete the workspace. |
+| `GET` | `/config`, `/health` | Public config / liveness. |
+
+**SSE event schema** (`data:` is JSON; every agent event carries an `agent` lane —
+`planner`/`builder`/`fixer`):
+
+- `status` `{state}` · `phase` `{agent, label}`
+- `tool_start` `{agent, id, tool, summary, args}` · `tool_end` `{agent, id, success, error}`
+- `text` `{agent, text}` · `usage` `{agent, model}`
+- `validation` `{attempt, issues[], green}` · `error` `{agent, message, fatal}`
+- `done` `{preview, has_index, green, issues[]}`
+
+Events are produced by mapping each `AgentResponseUpdate.raw_representation.data`
+(`ToolExecutionStartData` / `ToolExecutionCompleteData` / `AssistantUsageData` /
+`AssistantMessageDeltaData`) in `app/agents/stream_map.py`.
+
+## Multi-agent orchestration (Planner → Builder → Fixer)
+
+`app/agents/orchestrator.py` runs a **manual** sequential orchestration (chosen over the
+Agent Framework `WorkflowBuilder` so every underlying Copilot tool/text delta streams live,
+tagged by agent). All three personas **share one per-session `CopilotClient`/workspace** and
+run sequentially — verified that multiple `GitHubCopilotAgent`s can share a client.
+
+1. **Planner** (`app/agents/personas.py`) — emits a short text plan only (no tools).
+2. **Builder** — implements/edits the app; holds an `AgentSession` for conversational memory
+   (iteration edits the same files instead of rebuilding).
+3. **Fixer** — self-healing loop: `app/validation.py` produces a **real signal** (inline/local
+   JS run through `node --check`; referenced local assets must exist; `index.html` must exist).
+   On issues, the Fixer edits in place; re-validate; repeat up to `SANDCASTLE_MAX_FIX_ATTEMPTS`.
+
+Verified end-to-end: build → green preview; a second turn adds `localStorage` + a pause key by
+editing the existing app; and the real Fixer repairs a deliberately broken app back to green.
+
 ## Live preview strategy
 
 - **Hosted demo**: steer generation to **static/SPA output** (vanilla HTML/canvas, or
@@ -69,4 +113,8 @@ timeouts, rate limits, concurrency caps, output caps, workdir cleanup. Hardening
 
 - ✅ **Phase 0** — foundations: backend skeleton, venv + deps, container image, agent smoke
   test verified (`Sandcastle smoke test OK`).
-- ⏭️ **Phase 1** — core single-agent build loop (session manager, SSE streaming, preview).
+- ✅ **Phase 1** — core build loop: session manager, SSE streaming, static preview. E2E verified
+  (build a Snake game → live canvas preview).
+- ✅ **Phase 2** — multi-agent Planner→Builder→Fixer + self-healing; conversational iteration.
+  E2E verified (two-turn build+iterate; real Fixer repairs a broken app to green).
+- ⏭️ **Phase 3** — MCP grounding (Microsoft Learn HTTP MCP).
