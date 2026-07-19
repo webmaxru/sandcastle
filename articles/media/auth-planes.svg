@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" role="img" aria-label="Two planes: the agentic runtime stays in the sandbox; only model inference is routed to a provider.">
+  <rect x="0" y="0" width="1200" height="640" rx="20" fill="#FBF8F2"/>
+
+  <text x="600" y="50" text-anchor="middle" font-size="29" font-weight="700" fill="#1F2937">One provider, two planes</text>
+  <text x="600" y="82" text-anchor="middle" font-size="17" fill="#6B7280">The <tspan font-weight="700" fill="#0E7C86">agentic runtime</tspan> stays in your sandbox. Only <tspan font-weight="700" fill="#B45309">model inference</tspan> is routed — so you can go seat-free.</text>
+
+  <!-- ===== Sandbox box ===== -->
+  <g transform="translate(90,108)">
+    <rect x="0" y="0" width="1020" height="188" rx="16" fill="#FFFFFF" stroke="#B7E2DD" stroke-width="2"/>
+    <rect x="0" y="0" width="1020" height="40" rx="16" fill="#0E7C86"/>
+    <rect x="0" y="24" width="1020" height="16" fill="#0E7C86"/>
+    <text x="24" y="26" font-size="14.5" font-weight="700" fill="#FFFFFF">SANDBOX · Azure Container App — non-root, per-session workspace</text>
+    <text x="996" y="26" text-anchor="end" font-size="12.5" fill="#CFF3F0">CopilotClient → spawns @github/copilot CLI</text>
+
+    <text x="28" y="72" font-size="14.5" fill="#374151">Agentic runtime — runs <tspan font-weight="700">locally</tspan>, needs no model. Nothing here leaves the box:</text>
+
+    <!-- capability pills -->
+    <g font-size="14" font-weight="600">
+      <rect x="28" y="92" width="210" height="72" rx="12" fill="#F2FAF9" stroke="#CDEBE7"/>
+      <rect x="40" y="104" width="66" height="22" rx="6" fill="#1F2937"/>
+      <text x="73" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">SHELL</text>
+      <text x="44" y="150" font-size="13.5" fill="#374151">run · build · test</text>
+
+      <rect x="266" y="92" width="210" height="72" rx="12" fill="#FDF3E7" stroke="#F3D9B6"/>
+      <rect x="278" y="104" width="66" height="22" rx="6" fill="#B45309"/>
+      <text x="311" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">FILES</text>
+      <text x="282" y="150" font-size="13.5" fill="#374151">read · write · tree</text>
+
+      <rect x="504" y="92" width="210" height="72" rx="12" fill="#EEF6FF" stroke="#CBE1FB"/>
+      <rect x="516" y="104" width="66" height="22" rx="6" fill="#1D4ED8"/>
+      <text x="549" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">FETCH</text>
+      <text x="520" y="150" font-size="13.5" fill="#374151">pull URLs / assets</text>
+
+      <rect x="742" y="92" width="250" height="72" rx="12" fill="#F5F0FF" stroke="#E0D3FB"/>
+      <rect x="754" y="104" width="60" height="22" rx="6" fill="#6D28D9"/>
+      <text x="784" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">MCP</text>
+      <text x="758" y="150" font-size="13.5" fill="#374151">Microsoft Learn grounding</text>
+    </g>
+  </g>
+
+  <!-- ===== routing arrow ===== -->
+  <line x1="600" y1="296" x2="600" y2="352" stroke="#E0A94B" stroke-width="3" marker-end="url(#amberArrow2)"/>
+  <rect x="404" y="308" width="392" height="30" rx="15" fill="#FEF1DA" stroke="#F6D68A"/>
+  <text x="600" y="328" text-anchor="middle" font-size="13.5" font-weight="600" fill="#92600A">only model inference leaves the box → POST /chat/completions</text>
+
+  <!-- ===== three providers ===== -->
+  <g transform="translate(90,364)">
+    <!-- A: Copilot seat -->
+    <rect x="0" y="0" width="320" height="176" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="0" y="0" width="320" height="6" rx="3" fill="#9CA3AF"/>
+    <text x="20" y="36" font-size="16.5" font-weight="700" fill="#4B5563">GitHub Copilot seat</text>
+    <text x="20" y="62" font-size="13" font-family="'Cascadia Code', Consolas, monospace" fill="#6B7280">COPILOT_GITHUB_TOKEN</text>
+    <line x1="20" y1="78" x2="300" y2="78" stroke="#EFEFEF"/>
+    <text x="20" y="104" font-size="13.5" fill="#374151">Uses your personal license.</text>
+    <text x="20" y="126" font-size="13.5" fill="#374151">Perfect for local dev —</text>
+    <text x="20" y="148" font-size="13.5" fill="#B45309">a public demo would spend</text>
+    <text x="20" y="168" font-size="13.5" fill="#B45309">your seat on every visitor.</text>
+
+    <!-- B: GitHub Models (LIVE DEMO) -->
+    <rect x="350" y="0" width="320" height="176" rx="14" fill="#F3FBF5" stroke="#86EFAC" stroke-width="2.5"/>
+    <rect x="350" y="0" width="320" height="6" rx="3" fill="#16A34A"/>
+    <rect x="520" y="-16" width="150" height="30" rx="15" fill="#16A34A"/>
+    <text x="595" y="4" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="1" fill="#FFFFFF">LIVE DEMO</text>
+    <text x="370" y="40" font-size="16.5" font-weight="700" fill="#15803D">GitHub Models (free)</text>
+    <text x="370" y="66" font-size="12.5" font-family="'Cascadia Code', Consolas, monospace" fill="#166534">models.github.ai/inference</text>
+    <line x1="370" y1="80" x2="650" y2="80" stroke="#DCFCE7"/>
+    <text x="370" y="106" font-size="13.5" fill="#374151">Model <tspan font-family="'Cascadia Code', Consolas, monospace" fill="#166534">openai/gpt-4o-mini</tspan>.</text>
+    <text x="370" y="130" font-size="13.5" font-weight="700" fill="#15803D">Seat-free. Free tier.</text>
+    <text x="370" y="152" font-size="13.5" fill="#374151">Separate quota from Copilot —</text>
+    <text x="370" y="172" font-size="13.5" fill="#374151">never touches your seat.</text>
+
+    <!-- C: Azure OpenAI -->
+    <rect x="700" y="0" width="320" height="176" rx="14" fill="#FFFFFF" stroke="#CBE1FB" stroke-width="1.5"/>
+    <rect x="700" y="0" width="320" height="6" rx="3" fill="#1D4ED8"/>
+    <text x="720" y="36" font-size="16.5" font-weight="700" fill="#1E40AF">Azure OpenAI</text>
+    <text x="720" y="62" font-size="12.5" font-family="'Cascadia Code', Consolas, monospace" fill="#3B5BA9">COPILOT_PROVIDER_TYPE=azure</text>
+    <line x1="720" y1="78" x2="1000" y2="78" stroke="#EEF3FC"/>
+    <text x="720" y="104" font-size="13.5" fill="#374151">Your own deployment.</text>
+    <text x="720" y="126" font-size="13.5" font-weight="700" fill="#1E40AF">Paid · higher limits.</text>
+    <text x="720" y="148" font-size="13.5" fill="#374151">The robust choice for a</text>
+    <text x="720" y="168" font-size="13.5" fill="#374151">high-traffic public demo.</text>
+  </g>
+
+  <!-- ===== footer contract strip ===== -->
+  <rect x="90" y="576" width="1020" height="44" rx="12" fill="#1F2937"/>
+  <text x="600" y="603" text-anchor="middle" font-size="13" font-family="'Cascadia Code', Consolas, monospace" fill="#E5E7EB">BYOK: <tspan fill="#8FD3CB">COPILOT_PROVIDER_BASE_URL</tspan> activates it · <tspan fill="#8FD3CB">COPILOT_MODEL</tspan> at startup · per-session provider config</text>
+
+  <defs>
+    <marker id="amberArrow2" markerWidth="12" markerHeight="12" refX="6" refY="5" orient="auto">
+      <path d="M0,0 L9,5 L0,10 z" fill="#E0A94B"/>
+    </marker>
+  </defs>
+</svg>

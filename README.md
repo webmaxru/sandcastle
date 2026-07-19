@@ -136,6 +136,7 @@ docker-compose.yml · .devcontainer/   one-command / zero-setup local run
 
 ## Documentation
 
+- 📖 **[Technical deep‑dive article](articles/building-sandcastle-github-copilot-agent-framework.md)** — how the GitHub Copilot provider works and how Sandcastle was built (with diagrams).
 - [Architecture](docs/architecture.md) — verified provider API, streaming schema, orchestration, hardening.
 - [Deploy guide](docs/deploy.md) — provisioning, CI/CD, OIDC, local run.
 - [Launch kit](docs/launch.md) — demo script + social copy.
