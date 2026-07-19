@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "namePrefix": { "value": "sandcastle" },
+    "swaLocation": { "value": "eastus2" },
+    "backendImage": { "value": "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest" },
+    "enableRateLimit": { "value": true },
+    "providerBaseUrl": { "value": "" },
+    "providerApiKey": { "value": "" },
+    "githubToken": { "value": "" }
+  }
+}

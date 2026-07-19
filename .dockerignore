@@ -1,0 +1,24 @@
+# Keep the Docker build context small + secret-free (context = repo root).
+.git
+.github
+.venv
+**/.venv
+**/__pycache__
+**/*.pyc
+backend/.sessions
+.sessions
+node_modules
+**/node_modules
+frontend/dist
+frontend/.vite
+infra
+docs
+.devcontainer
+*.md
+.env
+.env.*
+!.env.example
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+.DS_Store
