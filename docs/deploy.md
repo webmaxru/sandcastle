@@ -70,6 +70,12 @@ az ad app create --display-name sandcastle-deployer
 # then grant the app's service principal Contributor on rg-sandcastle
 ```
 
+> **Heads-up — immutable OIDC subject.** Some accounts present the federated subject in
+> the *immutable* form `repo:<owner>@<owner_id>/<repo>@<repo_id>:ref:refs/heads/main`
+> instead of `repo:<owner>/<repo>:...`. If `azure/login` fails with **AADSTS700213
+> "No matching federated identity record"**, copy the exact `subject` from the error and
+> add a second federated credential with that value.
+
 Push to `main` → the app ships. 🎉
 
 ## 3. Alternative: Azure Developer CLI
