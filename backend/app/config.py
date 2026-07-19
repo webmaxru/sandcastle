@@ -42,6 +42,14 @@ class Settings(BaseSettings):
     session_timeout_seconds: int = Field(default=600, alias="SANDCASTLE_SESSION_TIMEOUT")
     max_fix_attempts: int = Field(default=2, alias="SANDCASTLE_MAX_FIX_ATTEMPTS")
 
+    # --- Hardening (hosted demo) ---
+    ratelimit_enabled: bool = Field(default=False, alias="SANDCASTLE_RATELIMIT")
+    rate_sessions_per_hour: int = Field(default=20, alias="SANDCASTLE_RATE_SESSIONS_PER_HOUR")
+    rate_builds_per_min: int = Field(default=6, alias="SANDCASTLE_RATE_BUILDS_PER_MIN")
+    max_stream_events: int = Field(default=8000, alias="SANDCASTLE_MAX_STREAM_EVENTS")
+    max_event_field_chars: int = Field(default=8000, alias="SANDCASTLE_MAX_EVENT_FIELD_CHARS")
+    max_text_file_bytes: int = Field(default=1_000_000, alias="SANDCASTLE_MAX_TEXT_FILE_BYTES")
+
     # --- Web ---
     cors_origins: str = Field(default="*", alias="SANDCASTLE_CORS_ORIGINS")
 
