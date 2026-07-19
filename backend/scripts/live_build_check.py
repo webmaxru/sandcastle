@@ -4,10 +4,11 @@ Types a prompt, clicks Build, waits for the agent team to produce a live
 preview iframe, and verifies the generated app actually renders inside it.
 Captures console/page errors and screenshots throughout.
 """
+import os
 import sys
 from playwright.sync_api import sync_playwright
 
-BASE = "http://localhost:5173/"
+BASE = os.environ.get("SANDCASTLE_UI_BASE", "http://localhost:5173/")
 OUT = sys.argv[1] if len(sys.argv) > 1 else "."
 PROMPT = (
     "Build a single self-contained index.html page: a big centered heading that "

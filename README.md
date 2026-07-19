@@ -2,6 +2,10 @@
 
 ### Describe an app. Watch a team of GitHub Copilot agents build, run, and self‑heal it — live, in a sandbox.
 
+**▶️ Live demo: https://mango-island-0bf66000f.7.azurestaticapps.net** &nbsp;·&nbsp; running on Azure free tiers (Static Web Apps + Container Apps).
+
+> The public demo runs on a scale‑to‑zero backend — the **first request may take ~20–30s** to cold‑start the agent runtime, then it's fast.
+
 Sandcastle is a showcase for the new [**GitHub Copilot provider for Microsoft Agent Framework**](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python).
 You type *“build me a …”*, and a multi‑agent team — **Planner → Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self‑heals** its own build errors, grounds itself in live Microsoft Learn docs, and streams a **live preview** you keep iterating on by chat.
 
