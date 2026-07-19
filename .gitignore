@@ -1,0 +1,37 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Runtime session sandboxes
+backend/.sessions/
+.sessions/
+
+# APM dependencies
+apm_modules/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Azure
+.azure/
+

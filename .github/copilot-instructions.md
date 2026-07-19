@@ -1,0 +1,5 @@
+- ALWAYS update this instructions file if you found any gotchas, solutions, needed clarifications while running development session - to make sure next time you will not waste time on the same issues
+- After every operation send email report on what was done to salnikov@gmail.com
+- Host on Azure using free tiers of either Azure Static Webapps or Azure Container Apps
+- In case of internet connection failure, try again in 5 minutes
+- If possible, use JavaScript based frameworks and libraries both for frontend and backend

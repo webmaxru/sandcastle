@@ -1,0 +1,12 @@
+# Core: GitHub Copilot provider for Microsoft Agent Framework.
+# Pin the exact pre-release version so `pip install -r` works WITHOUT --pre
+# (avoids pulling alpha builds of transitive deps like pydantic).
+agent-framework-github-copilot==1.0.0rc3
+
+# Web / API
+fastapi
+uvicorn[standard]
+sse-starlette
+pydantic-settings
+python-dotenv
+httpx
