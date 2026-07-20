@@ -2,7 +2,7 @@
 
 ### Describe an app. Watch a team of GitHub Copilot agents build, run, and self‑heal it — live, in a sandbox.
 
-**▶️ Live demo: https://mango-island-0bf66000f.7.azurestaticapps.net** &nbsp;·&nbsp; running on Azure free tiers (Static Web Apps + Container Apps).
+**▶️ Live demo: https://sandcastle.isainative.dev** &nbsp;·&nbsp; running on Azure free tiers (Static Web Apps + Container Apps).
 
 > The public demo runs on a scale‑to‑zero backend — the **first request may take ~20–30s** to cold‑start the agent runtime, then it's fast.
 > Model inference is **BYOK on the free [GitHub Models](https://github.com/marketplace/models) endpoint** — so the demo **never consumes a GitHub Copilot seat**. It's rate‑limited; heavy traffic may hit GitHub Models' free‑tier limits.

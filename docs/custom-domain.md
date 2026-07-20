@@ -4,9 +4,10 @@ Sandcastle's frontend runs on an Azure **Static Web App (Free)**. This guide wir
 domain **`sandcastle.isainative.dev`** (a subdomain of a zone hosted on **Cloudflare**) to it, with a
 free auto‑renewing TLS certificate.
 
-The domain is **already registered on the Static Web App** (status `Validating`) — you only need to
-add two DNS records in Cloudflare. No further Azure commands are required; Azure auto‑validates and
-issues the certificate once the records resolve.
+> ✅ **Status: live.** `https://sandcastle.isainative.dev` is validated and serving with a free,
+> auto‑renewing managed TLS certificate. It is validated by **CNAME‑delegation**, so the single routing
+> CNAME below is the only record you need. (A `_dnsauth` TXT record used during initial setup is now
+> optional and may be removed.)
 
 | Thing | Value |
 | --- | --- |
@@ -14,11 +15,11 @@ issues the certificate once the records resolve.
 | DNS provider | Cloudflare (zone `isainative.dev`) |
 | Static Web App | `swa-sandcastle-dlagu2f6mknfy` (RG `rg-sandcastle`, Free SKU) |
 | SWA default hostname (CNAME target) | `mango-island-0bf66000f.7.azurestaticapps.net` |
-| Validation | DNS TXT token (already issued) |
+| Validation | CNAME‑delegation (the routing CNAME both routes and proves ownership) |
 
 ---
 
-## 1. Add these two DNS records in Cloudflare
+## 1. Add the DNS record(s) in Cloudflare
 
 In the Cloudflare dashboard → zone **`isainative.dev`** → **DNS** → **Records** → **Add record**.
 
@@ -32,7 +33,10 @@ In the Cloudflare dashboard → zone **`isainative.dev`** → **DNS** → **Reco
 | **Proxy status** | **DNS only** — grey cloud ☁️ (NOT proxied / orange) |
 | **TTL** | Auto |
 
-### Record B — ownership validation (TXT)
+### Record B — ownership validation (TXT) — *optional*
+
+Only needed for the **DNS‑TXT‑token** validation method. The live domain uses **CNAME‑delegation**
+(Record A alone proves ownership), so this record is optional and can be removed.
 
 | Field | Value |
 | --- | --- |
@@ -53,7 +57,7 @@ full records `sandcastle.isainative.dev` and `_dnsauth.sandcastle.isainative.dev
 
 Once both records resolve (usually a few minutes on Cloudflare), Azure automatically:
 
-1. Verifies the TXT token → the domain flips from **`Validating`** to **`Ready`**.
+1. Verifies the CNAME (or TXT token) → the domain flips from **`Validating`** to **`Ready`**.
 2. Issues a **free, auto‑renewing managed TLS certificate** (via the CNAME).
 3. Serves the app at **https://sandcastle.isainative.dev**.
 

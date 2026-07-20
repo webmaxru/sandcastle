@@ -2,7 +2,7 @@
 
 ### How we built **Sandcastle** on the new GitHub Copilot provider for Microsoft Agent Framework — and what the feature actually unlocks
 
-> **▶️ Live demo:** https://mango-island-0bf66000f.7.azurestaticapps.net &nbsp;·&nbsp; **Source:** https://github.com/webmaxru/sandcastle
+> **▶️ Live demo:** https://sandcastle.isainative.dev &nbsp;·&nbsp; **Source:** https://github.com/webmaxru/sandcastle
 > Running on Azure free tiers (Static Web Apps + Container Apps). It builds **frontend‑only static web apps** — vanilla HTML/CSS/JS with no backend or database — the kind of app that drops straight onto SWA's free tier. Model inference is seat‑free BYOK on the free [GitHub Models](https://github.com/marketplace/models) endpoint.
 
 <p align="center">
@@ -472,7 +472,7 @@ cd sandcastle
 docker compose up --build         # backend + frontend, one command
 ```
 
-- **Live demo:** https://mango-island-0bf66000f.7.azurestaticapps.net
+- **Live demo:** https://sandcastle.isainative.dev
 - **Source:** https://github.com/webmaxru/sandcastle
 - **The feature:** [GitHub Copilot provider for Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python)
 - **GitHub Models (free inference):** https://github.com/marketplace/models
