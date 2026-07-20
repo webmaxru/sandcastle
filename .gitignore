@@ -26,6 +26,12 @@ backend/.sessions/
 # APM dependencies
 apm_modules/
 
+# Impeccable live-mode runtime state (keep .impeccable/design.json + live/config.json)
+.impeccable/live/sessions/
+.impeccable/critique/
+.impeccable/critiques/
+.impeccable/hook.cache.json
+
 # Editor / OS
 .DS_Store
 .idea/

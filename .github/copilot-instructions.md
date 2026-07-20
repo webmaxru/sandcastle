@@ -53,3 +53,25 @@ the **de-risk-first** (Phase 0) and **verify-before-advancing** discipline.
 2. Implement the thinnest version that can satisfy the gate.
 3. Write/keep a proof (smoke / e2e / headless script) and run it.
 4. Only when green: commit, push (if deploy-on-push), update the plan, then move to the next phase.
+
+---
+
+## Design Context (impeccable)
+
+This repo is set up for the **impeccable** design skill. Two root docs govern frontend design work
+and are read by every impeccable command before it acts:
+
+- **`PRODUCT.md`** (strategic): register = **product**, target users, purpose, brand personality
+  ("playful, credible, live"), anti-references, and 5 design principles (lead: *show, don't tell*).
+- **`DESIGN.md`** (visual, Stitch format): the real token system — North Star *"The Build Log"*, the
+  bright cool "drafting-paper" light palette, per-agent semantic color as legible ink (blue Planner /
+  amber Builder / green Fixer / violet grounding / red error), **no gradient** and one committed
+  indigo accent for the single Build action, flat opaque surfaces with hairline borders + a restrained
+  real shadow scale (never glass), a real inline-SVG icon set + castle mark (zero emoji), and
+  self-hosted IBM Plex Sans + IBM Plex Mono. `.impeccable/design.json` is its machine-readable sidecar.
+
+When changing anything under `frontend/`, follow `DESIGN.md`'s Do's and Don'ts. Live-mode is
+pre-configured (`.impeccable/live/config.json` → injects into `frontend/index.html`). The former a11y
+gaps are now closed: text clears WCAG AA on every surface (the floor token `ink-faint` ≈5.1:1), and a
+global `prefers-reduced-motion` block neutralizes all motion. Run `/impeccable audit frontend` or
+`/impeccable critique frontend/src/App.tsx` to keep them that way.

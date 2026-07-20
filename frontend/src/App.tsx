@@ -14,6 +14,7 @@ import { FileExplorer } from './components/FileExplorer'
 import { PreviewPane } from './components/PreviewPane'
 import { PromptBar } from './components/PromptBar'
 import { Chip } from './components/Badges'
+import { Icon, Logo } from './components/icons'
 
 let _seq = 0
 const uid = () => `a${Date.now()}_${_seq++}`
@@ -35,9 +36,17 @@ export default function App() {
   const lastPromptRef = useRef('')
 
   useEffect(() => {
-    getConfig().then(setConfig).catch(() => setConfig(null))
-    const q = new URLSearchParams(window.location.search).get('prompt')
+    const params = new URLSearchParams(window.location.search)
+    const q = params.get('prompt')
     if (q) setInitialPrompt(q)
+    // DEV-only: seed a mock transcript for screenshots. Stripped from production builds.
+    if (import.meta.env.DEV && params.has('demo')) {
+      setActivities(demoActivities())
+      setFiles(demoFiles())
+      getConfig().then(setConfig).catch(() => setConfig(demoConfig()))
+    } else {
+      getConfig().then(setConfig).catch(() => setConfig(null))
+    }
   }, [])
 
   const flash = useCallback((msg: string) => {
@@ -100,6 +109,10 @@ export default function App() {
     }
   }
 
+  const handleStop = useCallback(() => {
+    abortRef.current?.abort()
+  }, [])
+
   const handleNewApp = useCallback(async () => {
     abortRef.current?.abort()
     const id = sessionId
@@ -125,66 +138,74 @@ export default function App() {
   }, [flash])
 
   const previewSrc = sessionId ? previewUrl(sessionId, previewVersion) : null
+  const started = activities.length > 0 || building
 
   return (
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark">🏰</span>
-          <div>
-            <div className="brand-name">Sandcastle</div>
-            <div className="brand-tag">
-              Describe an app. Watch a team of Copilot agents build, ground &amp; self-heal it — live.
-            </div>
+          <Logo size={30} className="brand-logo" />
+          <div className="brand-text">
+            <h1 className="wordmark">Sandcastle</h1>
+            <p className="brand-tag">An AI team builds, runs &amp; self-heals a live app — watch it happen.</p>
           </div>
         </div>
-        <div className="badges">
-          {config && (
-            <>
-              <Chip label="model" value={config.model} />
-              <Chip label="team" value={config.agents.join(' → ')} />
-              <Chip
-                label="grounding"
-                value={config.mcp_grounding.length ? 'Microsoft Learn' : 'off'}
-                on={config.mcp_grounding.length > 0}
-              />
-              <Chip label="self-heal" value={`${config.max_fix_attempts}×`} />
-              {config.observability && <Chip label="otel" value="App Insights" on />}
-            </>
-          )}
-        </div>
+        {config && (
+          <div className="runrail" role="group" aria-label="Run configuration">
+            <Chip label="model" value={config.model} />
+            <Chip label="team" value={config.agents.join(' → ')} />
+            <Chip
+              label="grounding"
+              value={config.mcp_grounding.length ? 'Microsoft Learn' : 'off'}
+              on={config.mcp_grounding.length > 0}
+            />
+            <Chip label="self-heal" value={`${config.max_fix_attempts}×`} />
+            {config.observability && <Chip label="otel" value="App Insights" on />}
+          </div>
+        )}
       </header>
 
       <main className="workspace">
-        <section className="left">
-          <div className="left-head">
-            <span>Agent activity</span>
-            <div className="left-actions">
-              {(activities.length > 0 || sessionId) && (
+        <section className="panel panel-log" aria-label="Build log">
+          <div className="panel-head">
+            <span className="panel-title">
+              <Icon name="code" size={15} strokeWidth={1.8} />
+              Build log
+            </span>
+            {(started || sessionId) && (
+              <div className="panel-actions">
                 <button className="ghost-btn" onClick={handleShare}>
+                  <Icon name="link" size={14} strokeWidth={1.8} />
                   Share
                 </button>
-              )}
-              {sessionId && (
-                <button className="ghost-btn" onClick={handleNewApp}>
-                  New app
-                </button>
-              )}
-            </div>
+                {sessionId && (
+                  <button className="ghost-btn" onClick={handleNewApp}>
+                    <Icon name="plus" size={14} strokeWidth={1.9} />
+                    New app
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
-          <div className="left-body">
-            {activities.length === 0 && !building ? (
+          <div className="panel-body">
+            {!started ? (
               <ExampleGallery onPick={handleBuild} />
             ) : (
               <ActivityFeed activities={activities} building={building} />
             )}
           </div>
 
-          {error && <div className="error-banner">⚠️ {error}</div>}
+          {error && (
+            <div className="error-banner" role="alert">
+              <Icon name="alert" size={15} strokeWidth={1.8} />
+              <span>{error}</span>
+            </div>
+          )}
 
           <PromptBar
             onSubmit={handleBuild}
+            onStop={handleStop}
             building={building}
             hasSession={!!sessionId}
             initial={initialPrompt}
@@ -192,34 +213,73 @@ export default function App() {
           />
         </section>
 
-        <section className="right">
-          <div className="tabs">
-            <button className={tab === 'preview' ? 'tab active' : 'tab'} onClick={() => setTab('preview')}>
+        <section className="panel panel-proof" aria-label="Result">
+          <div className="tabs" role="tablist" aria-label="Result view">
+            <button
+              role="tab"
+              id="tab-preview"
+              aria-selected={tab === 'preview'}
+              aria-controls="panel-preview"
+              className={tab === 'preview' ? 'tab is-active' : 'tab'}
+              onClick={() => setTab('preview')}
+            >
+              <Icon name="monitor" size={15} strokeWidth={1.8} />
               Live preview
             </button>
-            <button className={tab === 'code' ? 'tab active' : 'tab'} onClick={() => setTab('code')}>
-              Code {files.length > 0 && <span className="tab-count">{files.length}</span>}
+            <button
+              role="tab"
+              id="tab-code"
+              aria-selected={tab === 'code'}
+              aria-controls="panel-code"
+              className={tab === 'code' ? 'tab is-active' : 'tab'}
+              onClick={() => setTab('code')}
+            >
+              <Icon name="file-code" size={15} strokeWidth={1.8} />
+              Code
+              {files.length > 0 && <span className="tab-count">{files.length}</span>}
             </button>
           </div>
-          <div className="right-body">
-            {tab === 'preview' ? (
+
+          <div className="panel-body">
+            <div
+              role="tabpanel"
+              id="panel-preview"
+              aria-labelledby="tab-preview"
+              className="tabpanel"
+              hidden={tab !== 'preview'}
+            >
               <PreviewPane
                 src={previewSrc}
                 hasApp={hasApp}
                 onReload={() => setPreviewVersion((v) => v + 1)}
               />
-            ) : (
+            </div>
+            <div
+              role="tabpanel"
+              id="panel-code"
+              aria-labelledby="tab-code"
+              className="tabpanel"
+              hidden={tab !== 'code'}
+            >
               <FileExplorer sessionId={sessionId} files={files} />
-            )}
+            </div>
           </div>
         </section>
       </main>
 
-      {toast && <div className="toast">{toast}</div>}
+      {toast && (
+        <div className="toast" role="status">
+          <Icon name="check" size={15} strokeWidth={2} />
+          {toast}
+        </div>
+      )}
+
       <footer className="footer">
-        Powered by the <strong>GitHub Copilot</strong> provider for{' '}
-        <strong>Microsoft Agent Framework</strong>
-        {config && ` · ${config.auth_mode.toUpperCase()} mode`}
+        <span>
+          Powered by the <strong>GitHub Copilot</strong> provider for the{' '}
+          <strong>Microsoft Agent Framework</strong>
+          {config && <> · {config.auth_mode.toUpperCase()} mode</>}
+        </span>
       </footer>
     </div>
   )
@@ -268,5 +328,44 @@ function reduceActivity(prev: Activity[], ev: SseEvent): Activity[] {
       ]
     default:
       return prev
+  }
+}
+
+/** DEV-only fixtures for screenshots. Never referenced in production builds. */
+function demoActivities(): Activity[] {
+  return [
+    { key: 'd0', kind: 'user', text: 'A Pomodoro focus timer with work/break cycles and a session counter.' },
+    { key: 'd1', kind: 'phase', agent: 'planner', label: 'Planning the build' },
+    { key: 'd2', kind: 'text', agent: 'planner', text: 'A single-page timer: 25-minute focus, 5-minute break, start/pause, and a counter of completed rounds.' },
+    { key: 'd3', kind: 'phase', agent: 'builder', label: 'Writing the app' },
+    { key: 'd4', kind: 'tool', tool: 'write', summary: 'write index.html', running: false, ok: true },
+    { key: 'd5', kind: 'tool', tool: 'write', summary: 'write styles.css', running: false, ok: true },
+    { key: 'd6', kind: 'tool', tool: 'docs', summary: 'Microsoft Learn · setInterval timing accuracy', running: false, ok: true },
+    { key: 'd7', kind: 'tool', tool: 'write', summary: 'write app.js', running: false, ok: true },
+    { key: 'd8', kind: 'phase', agent: 'fixer', label: 'Validating & self-healing' },
+    { key: 'd9', kind: 'validation', agent: 'fixer', green: false, issues: ['app.js:42 — timer drifts on background tabs'] },
+    { key: 'd10', kind: 'tool', tool: 'edit', summary: 'edit app.js — switch to timestamp-based ticks', running: false, ok: true },
+    { key: 'd11', kind: 'validation', agent: 'fixer', green: true },
+  ]
+}
+
+function demoFiles(): FileEntry[] {
+  return [
+    { path: 'index.html', size: 1284 },
+    { path: 'styles.css', size: 2361 },
+    { path: 'app.js', size: 3820 },
+  ]
+}
+
+function demoConfig(): AppConfig {
+  return {
+    auth_mode: 'pat',
+    model: 'gpt-4.1',
+    agents: ['planner', 'builder', 'fixer'],
+    mcp_grounding: ['Microsoft Learn'],
+    max_concurrent_sessions: 3,
+    max_fix_attempts: 2,
+    session_timeout_seconds: 300,
+    observability: true,
   }
 }
