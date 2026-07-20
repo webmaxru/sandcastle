@@ -79,16 +79,21 @@ then **trust** ("it's real — I can read the code and watch it debug itself"), 
 
 ## Accessibility & Inclusion
 
-Target **WCAG 2.1 AA**. Known considerations and current gaps (verify in an `audit` pass):
+Target **WCAG 2.1 AA**. The "Build Log" light redesign was built to clear it by construction; the
+former dark-theme risks are designed out (verify anew after any change):
 
-- **Contrast on the dark theme.** Cool near-white text (`#e7ecf6`) on deep navy (`#080b12`) is
-  strong, but muted blue-gray (`#8b95ab`, ~4.5:1) and the many small 10–12px labels sit near the
-  floor — treat muted body/label text as the contrast risk and verify against every surface tint.
-- **Reduced motion is currently unhandled.** The typing `blink`, toast `rise`, and hover
-  transitions have no `prefers-reduced-motion` alternative — a known gap to close.
-- **Streaming activity for assistive tech.** The live agent feed should expose an `aria-live`
-  region so screen-reader users perceive progress; verify this exists.
-- **Don't rely on color alone.** Agent lanes (Planner = azure, Builder = sand, Fixer = green) must
-  keep their icons and text labels so the distinction survives color-blindness and grayscale.
-- **Keyboard.** Prompt submission, tab navigation, and visible focus states must work without a
-  mouse.
+- **Text contrast (all AA, verified).** On the cool near-white paper, `ink` (`#1f2734`) lands ≈14:1,
+  `ink-soft` (`#4c535f`) ≈7.2:1, and even the floor token `ink-faint` (`#636975`) ≈5.1:1. Every agent
+  lane hue used as text (Planner blue / Builder amber / Fixer green / grounding violet / red / warn)
+  clears 5.0–6.4:1 on a white sheet, and the Build button's text on indigo ≈5.5:1. There is no
+  near-floor muted gray left in the system — the old `#8b95ab` contrast risk is gone.
+- **Reduced motion is handled.** A global `prefers-reduced-motion: reduce` block neutralizes all
+  transitions/animations, with specific overrides that settle the infinite loaders, typing blink,
+  pulse, and skeleton shimmer to a stable state. Motion is never required to perceive content.
+- **Streaming activity is a live region.** The build transcript is an `aria-live="polite"`
+  `role="log"` ordered list, so screen-reader users perceive streamed progress.
+- **Don't rely on color alone.** Agent lanes (Planner = blue, Builder = amber, Fixer = green) always
+  keep an SVG icon and a text label so the distinction survives color-blindness and grayscale.
+- **Keyboard.** One coherent, visible `:focus-visible` ring across all controls; the composer submits
+  on Enter (Shift+Enter for a newline); tabs are a real `role="tablist"` and file rows are `<button>`s
+  in a `role="listbox"`.

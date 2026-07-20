@@ -63,14 +63,15 @@ and are read by every impeccable command before it acts:
 
 - **`PRODUCT.md`** (strategic): register = **product**, target users, purpose, brand personality
   ("playful, credible, live"), anti-references, and 5 design principles (lead: *show, don't tell*).
-- **`DESIGN.md`** (visual, Stitch format): the real token system — North Star *"The Lit Control
-  Room"*, the dark backlit-glass palette, per-agent semantic color (azure Planner / sand Builder /
-  green Fixer / violet grounding / red error), the one sand→azure brand gradient (wordmark + Build
-  button only), flat tonal elevation, Inter + JetBrains Mono. `.impeccable/design.json` is its
-  machine-readable sidecar.
+- **`DESIGN.md`** (visual, Stitch format): the real token system — North Star *"The Build Log"*, the
+  bright cool "drafting-paper" light palette, per-agent semantic color as legible ink (blue Planner /
+  amber Builder / green Fixer / violet grounding / red error), **no gradient** and one committed
+  indigo accent for the single Build action, flat opaque surfaces with hairline borders + a restrained
+  real shadow scale (never glass), a real inline-SVG icon set + castle mark (zero emoji), and
+  self-hosted IBM Plex Sans + IBM Plex Mono. `.impeccable/design.json` is its machine-readable sidecar.
 
 When changing anything under `frontend/`, follow `DESIGN.md`'s Do's and Don'ts. Live-mode is
-pre-configured (`.impeccable/live/config.json` → injects into `frontend/index.html`). Known design
-gaps to close (from PRODUCT.md accessibility): no `prefers-reduced-motion` fallback yet, and muted
-`#8b95ab` text sits near the contrast floor. Run `/impeccable audit frontend` or
-`/impeccable critique frontend/src/App.tsx` to work these.
+pre-configured (`.impeccable/live/config.json` → injects into `frontend/index.html`). The former a11y
+gaps are now closed: text clears WCAG AA on every surface (the floor token `ink-faint` ≈5.1:1), and a
+global `prefers-reduced-motion` block neutralizes all motion. Run `/impeccable audit frontend` or
+`/impeccable critique frontend/src/App.tsx` to keep them that way.

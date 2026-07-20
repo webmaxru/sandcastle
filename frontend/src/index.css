@@ -1,23 +1,124 @@
-:root {
-  --bg: #080b12;
-  --bg-2: #0c111c;
-  --panel: rgba(20, 27, 43, 0.72);
-  --panel-solid: #101726;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
-  --text: #e7ecf6;
-  --muted: #8b95ab;
-  --sand: #f6c177;
-  --azure: #38bdf8;
-  --green: #4ade80;
-  --red: #f87171;
-  --violet: #a78bfa;
-  --accent: linear-gradient(135deg, #f6c177 0%, #38bdf8 100%);
+/* ============================================================================
+   Sandcastle — foundation: self-hosted type, light OKLCH tokens, base reset.
+   Design system: "The Build Log" — a bright engineering instrument.
+   ========================================================================== */
 
-  color-scheme: dark;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: var(--text);
-  background: var(--bg);
+/* ---- Self-hosted type (IBM Plex Sans + Mono, OFL — see public/fonts/LICENSE) ---- */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-latin-700-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-latin-600-normal.woff2') format('woff2');
+}
+
+:root {
+  /* -- Surfaces: a cool "drafting-paper" desk with crisp white sheets on it -- */
+  --paper: oklch(0.975 0.004 245);
+  --surface: oklch(0.995 0.0015 245);
+  --surface-2: oklch(0.955 0.006 245);
+  --code-bg: oklch(0.945 0.006 245);
+
+  /* -- Ink -- */
+  --ink: oklch(0.27 0.028 262);
+  --ink-soft: oklch(0.44 0.022 262);
+  --ink-faint: oklch(0.52 0.02 262);
+
+  /* -- Structural lines -- */
+  --line: oklch(0.9 0.008 250);
+  --line-strong: oklch(0.83 0.012 250);
+
+  /* -- Brand / single committed interactive accent (indigo, not neon) -- */
+  --accent: oklch(0.52 0.17 264);
+  --accent-strong: oklch(0.45 0.16 264);
+  --accent-tint: oklch(0.955 0.03 264);
+  --on-accent: oklch(0.99 0.005 264);
+
+  /* -- Semantic lanes / states (legible on light; always paired w/ icon+label) -- */
+  --planner: oklch(0.5 0.15 250);
+  --builder: oklch(0.5 0.11 66);
+  --fixer: oklch(0.5 0.13 156);
+  --ground: oklch(0.5 0.17 300);
+  --danger: oklch(0.53 0.2 25);
+  --warn: oklch(0.54 0.12 72);
+
+  /* per-lane wash, derived so tints track their hue */
+  --planner-wash: color-mix(in oklab, var(--planner) 9%, var(--surface));
+  --builder-wash: color-mix(in oklab, var(--builder) 10%, var(--surface));
+  --fixer-wash: color-mix(in oklab, var(--fixer) 10%, var(--surface));
+  --ground-wash: color-mix(in oklab, var(--ground) 9%, var(--surface));
+  --danger-wash: color-mix(in oklab, var(--danger) 9%, var(--surface));
+
+  /* -- Restrained real shadow scale (legit on light) -- */
+  --shadow-sm: 0 1px 2px oklch(0.5 0.05 262 / 0.07), 0 1px 1px oklch(0.5 0.05 262 / 0.04);
+  --shadow-md: 0 2px 8px oklch(0.45 0.06 262 / 0.08), 0 10px 26px oklch(0.45 0.06 262 / 0.07);
+  --shadow-lg: 0 16px 48px oklch(0.4 0.06 262 / 0.16);
+
+  /* -- Radius scale -- */
+  --r-xs: 5px;
+  --r-sm: 8px;
+  --r-md: 11px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* -- Type -- */
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, monospace;
+
+  /* -- Semantic z-index scale -- */
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  color: var(--ink);
+  background: var(--paper);
 }
 
 * {
@@ -32,11 +133,9 @@ body,
 }
 
 body {
-  background:
-    radial-gradient(1100px 600px at 12% -8%, rgba(56, 189, 248, 0.14), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(246, 193, 119, 0.12), transparent 55%),
-    var(--bg);
+  background: var(--paper);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button {
@@ -44,14 +143,58 @@ button {
   cursor: pointer;
 }
 
+/* One coherent focus system for the whole app */
+:where(a, button, [role='button'], [role='tab'], input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+::selection {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* Thin, light scrollbars that read as part of the instrument */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: var(--line-strong);
+  border-radius: var(--r-pill);
+  border: 3px solid var(--surface);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--ink-faint);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

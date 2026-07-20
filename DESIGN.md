@@ -1,53 +1,65 @@
 ---
 name: Sandcastle
-description: Describe an app; watch a team of GitHub Copilot agents build, run, and self-heal it — live, in a sandbox.
+description: Describe an app; watch a team of GitHub Copilot agents build, run, and self-heal it — live, in a bright build log.
 colors:
-  deep-navy: "#080b12"
-  navy-lift: "#0c111c"
-  panel: "#141b2bb8"
-  panel-solid: "#101726"
-  border: "#ffffff14"
-  border-strong: "#ffffff24"
-  ink: "#e7ecf6"
-  muted: "#8b95ab"
-  sand: "#f6c177"
-  azure: "#38bdf8"
-  green: "#4ade80"
-  red: "#f87171"
-  violet: "#a78bfa"
+  paper: "#f5f7f9"
+  surface: "#fdfdfe"
+  surface-2: "#edf1f4"
+  code-bg: "#eaedf1"
+  ink: "#1f2734"
+  ink-soft: "#4c535f"
+  ink-faint: "#636975"
+  line: "#dadee3"
+  line-strong: "#c2c8cf"
+  accent: "#3461c9"
+  accent-strong: "#254dac"
+  accent-tint: "#e6f1ff"
+  planner: "#0065b4"
+  builder: "#8d5403"
+  fixer: "#007842"
+  ground: "#7444b4"
+  danger: "#c51d28"
+  warn: "#996100"
 typography:
   brand:
-    fontFamily: "Inter, 'Segoe UI', system-ui, -apple-system, sans-serif"
-    fontSize: "20px"
-    fontWeight: 800
-    lineHeight: 1.1
-    letterSpacing: "-0.3px"
-  title:
-    fontFamily: "Inter, 'Segoe UI', system-ui, sans-serif"
-    fontSize: "14px"
+    fontFamily: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    fontSize: "19px"
     fontWeight: 700
+    lineHeight: 1.1
+    letterSpacing: "-0.01em"
+  h1:
+    fontFamily: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    fontSize: "28px"
+    fontWeight: 600
+    lineHeight: 1.12
+    letterSpacing: "-0.02em"
+  title:
+    fontFamily: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    fontSize: "15px"
+    fontWeight: 600
     lineHeight: 1.3
   body:
-    fontFamily: "Inter, 'Segoe UI', system-ui, sans-serif"
-    fontSize: "13px"
+    fontFamily: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    fontSize: "14px"
     fontWeight: 400
-    lineHeight: 1.45
+    lineHeight: 1.5
   label:
-    fontFamily: "Inter, 'Segoe UI', system-ui, sans-serif"
-    fontSize: "10px"
+    fontFamily: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    fontSize: "11px"
     fontWeight: 600
     lineHeight: 1.2
-    letterSpacing: "0.5px"
+    letterSpacing: "0.02em"
   mono:
-    fontFamily: "'JetBrains Mono', 'Cascadia Code', monospace"
-    fontSize: "11.5px"
+    fontFamily: "'IBM Plex Mono', ui-monospace, 'Cascadia Code', Consolas, monospace"
+    fontSize: "12.5px"
     fontWeight: 400
     lineHeight: 1.55
 rounded:
-  pill: "999px"
+  xs: "5px"
   sm: "8px"
-  md: "12px"
+  md: "11px"
   lg: "16px"
+  pill: "999px"
 spacing:
   xs: "4px"
   sm: "8px"
@@ -56,32 +68,27 @@ spacing:
   xl: "22px"
 components:
   button-primary:
-    backgroundColor: "{colors.azure}"
-    textColor: "#06121f"
-    rounded: "{rounded.md}"
-    padding: "0 20px"
+    backgroundColor: "{colors.accent}"
+    textColor: "#fdfcff"
+    rounded: "{rounded.sm}"
+    padding: "9px 16px"
   button-ghost:
-    backgroundColor: "transparent"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.sm}"
-    padding: "5px 12px"
+    padding: "8px 12px"
   chip:
-    backgroundColor: "#ffffff08"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.pill}"
-    padding: "5px 10px"
+    rounded: "{rounded.sm}"
+    padding: "4px 9px"
   input:
-    backgroundColor: "#ffffff08"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.md}"
-    padding: "11px 13px"
-  card:
-    backgroundColor: "#ffffff05"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
-    padding: "14px"
+    padding: "12px 14px"
   panel:
-    backgroundColor: "{colors.panel}"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.lg}"
 ---
@@ -90,203 +97,231 @@ components:
 
 ## 1. Overview
 
-**Creative North Star: "The Lit Control Room"**
+**Creative North Star: "The Build Log"**
 
-Sandcastle is a dark, calm operations surface built to be *watched*. The frame recedes — deep navy
-glass panels, hairline borders, dense compact type — so the live activity inside them (agents
-streaming plans, tool calls, a self-heal loop going green, an app rendering) is the only thing that
-draws the eye. It is a two-pane workspace, not a landing page: the left pane is the agent theatre,
-the right pane is the proof (live preview + real source). The mood is a quiet, backlit control room
-where a small team is visibly at work.
+Sandcastle is a bright, structural engineering instrument — a build log you can read across a room.
+The scene it is built for: a skeptical developer, phone in hand from a conference tweet, or a
+spectator glancing at a booth screen in a fluorescent hall, giving it ten seconds to prove that an
+AI *team* really plans, writes, runs, and self-heals a live app. That scene forces the whole design:
+**light**, high-contrast, legible on a projector, a phone, and in daylight. A tool, not a poster.
 
-Color here is **information, not decoration**. Each agent owns a hue — Planner azure, Builder sand,
-Fixer green — and the sand→azure brand gradient appears in exactly two brand moments (the wordmark
-and the primary Build button) and nowhere else. Depth is tonal, not heavy: translucent panels over a
-radial-lit background, `backdrop-filter` blur on the chrome, 1px white-alpha borders. Almost no drop
-shadows. The result reads credible and technical without going sterile.
+It is a two-pane workspace, not a landing page. The left pane is the **build transcript** — a real
+engineering log with a timeline spine, agent lanes, and monospaced tool rows. The right pane is the
+**proof** — a live preview and the actual generated source. The frame is quiet drafting-paper white
+so the live activity inside it is the only thing that moves.
 
-It explicitly rejects the plain-LLM-chatbox reflex (no single reply bubble that hides the work), the
-sterile enterprise dashboard (no KPI-card grids, no hero-metric template), and any "magic black box"
-polish that would hide the agents doing their job. If it ever looks like a generic SaaS admin panel,
-it has failed its own thesis: *show, don't tell.*
+Color here is **information, not decoration.** Each agent owns a hue — Planner blue, Builder amber,
+Fixer green — but on light these are legible *ink tags and keylines*, not neon fills. There is **no
+gradient anywhere** and exactly **one committed accent** (indigo) for the single primary action
+(Build). Depth is honest: flat opaque surfaces, hairline borders, and a restrained real shadow
+scale. No glass, no blur, no backlight.
+
+This design is a deliberate rejection of the reflex it would be easiest to fall into: the dark,
+neon-glass "AI devtool dashboard." That look — radial neon spotlights, five glowing accents,
+frosted-glass panels — is exactly what gets generated for "watch AI agents build apps," and it reads
+as a mood board, not an instrument. Sandcastle instead looks like the thing it builds proof about:
+a real, running, inspectable tool.
 
 **Key Characteristics:**
-- Dark, backlit, glass-paneled two-pane workspace; frame recedes, live content leads.
-- Semantic per-agent color (azure / sand / green), always paired with icon + label.
-- One brand gradient (sand→azure), scoped to wordmark + primary CTA only.
-- Flat, tonal depth: translucency + hairline borders + backdrop blur, not shadow ramps.
-- Compact, fixed-px product scale; Inter for UI, JetBrains Mono for anything "real" (tools, code).
+- Bright drafting-paper two-pane workspace; the frame recedes, the live log leads.
+- Semantic per-agent color (blue / amber / green), always paired with an icon + text label.
+- **No gradient.** One committed indigo accent, reserved for the single primary (Build) action.
+- Flat, opaque surfaces with hairline borders and a restrained real shadow scale — never glass.
+- Real inline-SVG icon set (1.6px stroke, `currentColor`) and a custom castle mark — zero emoji.
+- IBM Plex Sans for everything human; IBM Plex Mono for everything a machine produced.
 
-## 2. Colors: The Backlit Console Palette
+## 2. Colors: Drafting Paper & Load-Bearing Ink
 
-A deep-navy console under two soft spotlights (an azure wash top-left, a sand wash top-right), with
-a small set of saturated, load-bearing signal colors.
+A cool near-white desk with crisp white sheets on it, marked up in dark structural ink and a small
+set of saturated, load-bearing signal colors. All tokens are authored in **OKLCH**; the hex values
+in the frontmatter are sRGB fallbacks for reference.
 
 ### Primary
-- **Azure** (`#38bdf8`): The primary interactive accent. Focus borders on inputs, the active tab
-  underline, the Planner lane, selection tints, and one half of the brand gradient. This is the
-  "system is live / this is interactive" color.
-- **Sand** (`#f6c177`): The warm brand counterweight and the Builder lane. Pairs with azure in the
-  135° brand gradient (wordmark + Build button) and marks "warn" validation states.
+- **Accent / Indigo** (`oklch(0.52 0.17 264)` · `#3461c9`): The single committed interactive accent.
+  It fills exactly one thing — the primary **Build** button — and marks focus rings, links, and text
+  selection. Seeing indigo means "this is the one action" or "this is interactive." `accent-strong`
+  (`#254dac`) is its hover/active; `accent-tint` (`#e6f1ff`) is the selection wash.
 
-### Secondary
-- **Green** (`#4ade80`): Success and the Fixer lane — the self-heal loop and the "Validation passed"
-  banner. Green appearing is the money moment; treat its arrival as an event.
-- **Violet** (`#a78bfa`): Grounding + the human. Tags the Microsoft Learn MCP tool rows and the
-  user's own message bubble (an azure→violet gradient). Signals "external knowledge / you."
+### Semantic lanes (color = meaning)
+Each agent and grounding source owns a hue, tuned to ~`L 0.5` so it stays legible **as text** on a
+white sheet (all clear WCAG AA — see §6):
+- **Planner — Blue** (`#0065b4`): planning phases and the user's own turn.
+- **Builder — Amber** (`#8d5403`): the code-writing phase. The one warm hue; it is the only place
+  the "sandcastle" warmth lives.
+- **Fixer — Green** (`#007842`): validation and self-heal. Green arriving is the money moment — the
+  "Validation passed" row — so treat its appearance as an event.
+- **Grounding — Violet** (`#7444b4`): Microsoft Learn / MCP tool rows. Signals "external knowledge."
+- **Danger — Red** (`#c51d28`): errors only — the error banner and failed rows. Never decorative.
+- **Warn — Amber-deep** (`#996100`): a self-heal issue that is being worked, not a failure.
 
-### Tertiary
-- **Red** (`#f87171`): Errors only — the error banner and failed tool/validation rows. Never
-  decorative.
+Each lane also has a derived `*-wash` (the hue mixed ~9–10% into `surface`) for the faint tint behind
+a badge or bubble — computed with `color-mix` so the tint always tracks its own hue.
 
-### Neutral
-- **Deep Navy** (`#080b12`): The base body background, under two radial spotlights (azure at 12%/-8%,
-  sand at 100%/0%).
-- **Navy Lift** (`#0c111c`): Secondary surfaces that must recede — the code view and the empty
-  preview placeholder.
-- **Panel** (`#141b2b` @ 72% / `panel-solid #101726`): The glass workspace panels and the solid toast
-  base.
-- **Ink** (`#e7ecf6`): Primary text — a cool near-white, never pure `#fff`.
-- **Muted** (`#8b95ab`): Secondary text, labels, metadata. Sits near the 4.5:1 contrast floor —
-  treat as the contrast risk, not a free "elegance" gray.
-- **Border** (`#ffffff` @ 8% / **border-strong** @ 14%): Hairline dividers and control strokes. The
-  only structural line in the system.
+### Neutrals — the paper stack
+- **Paper** (`#f5f7f9`): the body/desk background. A *cool* near-white (chroma toward blue, not the
+  warm cream/sand AI default). Warmth in this app is carried only by the Builder amber, never the bg.
+- **Surface** (`#fdfdfe`): the raised white sheets — panels, cards, inputs, chips.
+- **Surface-2 / Code-bg** (`#edf1f4` / `#eaedf1`): recessed fills — the mono tool rows, code view,
+  and skeletons.
+- **Ink / Ink-soft / Ink-faint** (`#1f2734` / `#4c535f` / `#636975`): the three-step text ramp.
+  `ink` is body and headings (~14:1), `ink-soft` is secondary (~7:1), `ink-faint` is the floor for
+  small meta and hints — and even the floor clears AA at **5.1:1** on paper.
+- **Line / Line-strong** (`#dadee3` / `#c2c8cf`): hairline dividers and control strokes. The only
+  structural line in the system.
 
 ### Named Rules
-**The One Gradient Rule.** The sand→azure brand gradient (`linear-gradient(135deg, #f6c177, #38bdf8)`)
-appears in exactly two places: the wordmark and the primary Build button. It is never used as text
-fill anywhere else, never on body or data, and never as a decorative panel wash.
+**The No-Gradient Rule.** There is no gradient anywhere in Sandcastle — not on the wordmark, not on
+the Build button, not on a bubble, not as a background wash. Emphasis comes from weight, size, a
+solid fill, or a hairline. (This is the deliberate inversion of the old "one gradient" system.)
 
-**The Color-Is-Meaning Rule.** Azure = Planner/interactive, Sand = Builder, Green = Fixer/success,
-Violet = grounding/user, Red = error. A hue's presence tells you *which agent or state* you are
-looking at — so color is never spent on decoration, and every colored element also carries an icon
-or label so the meaning survives grayscale and color-blindness.
+**The Color-Is-Meaning Rule.** Blue = Planner/interactive, Amber = Builder, Green = Fixer/success,
+Violet = grounding, Red = error, Indigo = the one primary action. A hue's presence tells you *which
+agent or state* you are looking at — so color is never spent on decoration, and every colored element
+also carries an icon or text label so the meaning survives grayscale and color-blindness.
 
 ## 3. Typography
 
-**Display / UI Font:** Inter (with `'Segoe UI', system-ui, -apple-system, sans-serif` fallback)
-**Mono Font:** JetBrains Mono (with `'Cascadia Code', monospace` fallback)
+**UI / Prose Font:** IBM Plex Sans (self-hosted woff2, weights 400/500/600/700)
+**Machine Font:** IBM Plex Mono (self-hosted woff2, weights 400/500/600)
 
-**Character:** One workhorse sans for everything human-facing, one monospace for everything "real."
-The mono font is a deliberate signal: tool-call summaries, the preview URL, and generated source all
-render in JetBrains Mono so machine output *looks* like machine output. No display or serif faces —
-this is a tool, not a poster. (Note: neither webfont is bundled; both rely on a locally installed
-copy or the system fallback. If brand-consistent type matters cross-machine, self-host Inter +
-JetBrains Mono — see Do's.)
+**Character:** a humanist workhorse sans for everything a person reads, paired on a contrast axis with
+a monospace for everything a machine produced. Both are **self-hosted** from `public/fonts/` (OFL, see
+`public/fonts/LICENSE.txt`) with a robust system fallback stack, so legibility never depends on the
+webfont finishing loading. No display or serif faces — this is an instrument, not a poster. IBM Plex
+is deliberately *not* Inter/Geist/Space Grotesk (the currently over-generated UI sans).
 
 ### Hierarchy
-- **Brand** (800, 20px, `-0.3px`): The "Sandcastle" wordmark only — the single heaviest, tightest
-  type in the app, filled with the brand gradient.
-- **Title** (700, 14px): Section and card headings — gallery card names, panel headers.
-- **Body** (400, 12.5–13.5px, 1.4–1.5): Feed text, prompts, descriptions. Compact by design.
-- **Mono** (400, 11.5–12px, 1.55): Tool summaries, preview URL, code view. `word-break` +
-  `white-space: pre-wrap` so long machine strings wrap instead of overflowing.
-- **Label** (600, 10–11px, `+0.5px`, uppercase): Chip labels and metadata (`MODEL`, `TEAM`). The
-  only uppercase in the system; reserved for terse key/value chrome.
+- **Brand** (Sans 700, 19px, `-0.01em`): the "Sandcastle" wordmark — a solid `ink` fill beside the
+  castle mark. Never gradient-filled.
+- **H1** (Sans 600, ~28px, `-0.02em`, `text-wrap: balance`): the onboarding headline only.
+- **Title** (Sans 600, 15px): panel headers, card and section headings.
+- **Body** (Sans 400, 14px, 1.5): transcript prose, descriptions, prompts. Prose caps at ~68ch.
+- **Label** (Sans 600, 11px, `0.02em`): chip keys and small meta. **Not** all-caps by default — light
+  gives enough contrast without shouting.
+- **Mono** (Mono 400, 12.5px, 1.55): every machine string — tool summaries, the preview URL, config
+  values, generated source. `overflow-wrap: anywhere` so long strings wrap instead of overflowing.
 
 ### Named Rules
-**The Mono-Means-Real Rule.** If a string came from a machine — a shell/tool summary, a URL,
-generated source — it is set in JetBrains Mono. Human prose is set in Inter. The font is a truth
-signal; don't blur the two.
+**The Mono-Means-Real Rule.** If a string came from a machine — a tool summary, a URL, a config
+value, generated source — it is set in IBM Plex Mono. Human prose is set in IBM Plex Sans. The font
+is a truth signal; don't blur the two.
 
 ## 4. Elevation
 
-Flat by default, with tonal layering instead of a shadow ramp. Depth is built from three materials:
-(1) translucent panels (`rgba(20,27,43,0.72)`) floating over a radial-lit deep-navy background, (2)
-`backdrop-filter: blur(8–10px)` on the chrome (topbar and both workspace panels), and (3) 1px
-white-alpha hairline borders that separate surfaces. There is no elevation scale — surfaces don't
-"lift" on hover; they shift border color and background tint instead.
+Flat and opaque, layered with a **restrained real shadow scale** (legitimate on light) plus hairline
+borders — never glass, never `backdrop-filter`. Surfaces sit on the paper as distinct white sheets;
+they are separated by tone and a 1px line, and lifted only when they genuinely float.
 
-### Shadow Vocabulary (deliberately minimal)
-- **Brand glow** (`filter: drop-shadow(0 3px 8px rgba(56,189,248,0.4))`): Azure halo under the 🏰
-  brand mark only. A single spotlight touch.
-- **Toast lift** (`box-shadow: 0 8px 30px rgba(0,0,0,0.5)`): The only true drop shadow, lifting the
-  transient toast above the workspace.
+### Shadow Vocabulary
+- **`--shadow-sm`**: a 1–2px contact shadow for resting raised controls (the Build button, chips).
+- **`--shadow-md`**: a soft 8–26px lift for the two workspace panels off the paper.
+- **`--shadow-lg`**: a 16–48px shadow reserved for the transient toast, the one truly floating layer.
+
+All three are low-alpha, cool-tinted (toward the ink hue), and blur-only — no hard offset, no colored
+glow. The z-index scale is semantic: `--z-sticky` → `--z-overlay` → `--z-modal` → `--z-toast` →
+`--z-tooltip`, never arbitrary `9999`.
 
 ### Named Rules
-**The Flat-Glass Rule.** Surfaces are flat translucent glass at rest. Convey depth with
-translucency, blur, and hairline borders — not box-shadow. The two shadows above are the whole
-budget; adding a third is almost always wrong.
+**The Flat-Opaque Rule.** Surfaces are flat and opaque. Convey depth with tone, a hairline border,
+and a restrained real shadow — never with translucency, blur, or a glass panel. If a surface needs to
+"pop," raise its shadow one step or strengthen its border; do not frost it.
 
 ## 5. Components
 
 ### Buttons
-- **Shape:** Rounded rectangles — primary/input `12px` (`rounded.md`), ghost/icon `8px`
-  (`rounded.sm`).
-- **Primary (Build):** The brand gradient (`linear-gradient(135deg, sand, azure)`) with dark ink
-  text (`#06121f`), full-height, weight 700. Hover `filter: brightness(1.08)`, active
-  `transform: scale(0.97)`, disabled `opacity: 0.5`. The one loud control in the app — there is
-  exactly one primary action on screen at a time.
-- **Ghost:** Transparent with a `border-strong` stroke and ink text; hover fills to
-  `rgba(255,255,255,0.06)`. Used for Share / New app.
-- **Icon:** 30×30, `8px`, `border-strong` stroke, transparent; hover `rgba(255,255,255,0.07)`,
-  disabled `opacity: 0.4`.
+- **Shape:** rounded rectangles, `8px` (`rounded.sm`); icon buttons `8px` square.
+- **Primary (Build):** solid `accent` (indigo) fill, `on-accent` near-white text, weight 600,
+  `--shadow-sm`, hairline `accent-strong` border. Hover deepens to `accent-strong`; disabled drops to
+  `opacity: 0.45`. It never wraps (`white-space: nowrap`). **Exactly one primary action on screen.**
+- **Stop:** the Build button's inverse while a run streams — `danger` text on `surface` with a
+  danger-tinted border; hover fills `danger-wash`.
+- **Ghost / Icon:** `surface` fill (or transparent) with a `line` border and `ink` text; hover tints
+  `surface-2`. Used for Share, reload, external-open, New app.
 
 ### Chips & Agent Badges
-- **Chip:** Pill (`999px`), `rgba(255,255,255,0.03)` fill, `border`, with an uppercase muted label +
-  ink value. Status/metadata only (model, team, self-heal, otel), never a control.
-- **Agent badge:** Pill with the agent's own hue at ~12% fill + 35% border + full-strength text,
-  icon-led (🧭 Planner azure / 🔨 Builder sand / 🩹 Fixer green). The load-bearing signal of the
-  activity feed.
-
-### Cards (Example Gallery)
-- **Corner:** `12px` (`rounded.md`).
-- **Background:** `rgba(255,255,255,0.02)` over the panel; hover tints azure
-  (`rgba(56,189,248,0.07)`) and lifts `translateY(-2px)` with a `border-strong` edge.
-- **Elevation:** No shadow — see Flat-Glass Rule.
-- **Padding:** `14px`. Emoji + name + prompt, left-aligned. Used only for the empty-state gallery;
-  not a general layout crutch.
+- **Chip (run-config rail):** a small `surface` pill with a hairline border, a `label`-weight key in
+  `ink-faint` and a **mono** value in `ink` (`model gpt-4.1`, `team planner → builder → fixer`).
+  Status/metadata only, never a control.
+- **Agent badge:** an icon-led tag in the agent's own hue at `*-wash` fill + hue border + full-strength
+  hue text (Planner / Builder / Fixer). The load-bearing signal of the transcript; the SVG icon means
+  the lane survives grayscale.
 
 ### Inputs / Fields
-- **Style:** `rgba(255,255,255,0.03)` fill, `border-strong` stroke, `12px` radius, ink text.
-- **Focus:** Border shifts to **azure** (`--azure`), no glow. Quiet and precise.
-- **Disabled:** Carried on the Build button (`opacity: 0.5`), not the field.
+- **Composer:** `surface` fill, `line` border, `11px` radius, `ink` text, auto-growing textarea
+  (cap ~168px). Placeholder is `ink-faint` (AA, not a washed-out gray).
+- **Focus:** the shared focus system — a `2px accent` outline at `2px` offset — applies to every
+  interactive element, so focus is one consistent, visible treatment.
+
+### Onboarding (replaces the card grid)
+The empty state is **not** an identical card grid. It is: one strong headline, a three-lane "how it
+works" mini-timeline (Planner → Builder → Fixer on a spine), one featured *grounded* starter (the
+Weather card, tagged `GROUNDED`), and a varied, non-uniform set of starter chips. First-time
+spectators get what they are about to watch in one glance.
 
 ### Tabs & Navigation
-- **Tabs:** Text tabs with a transparent bottom border that becomes **azure** when active; inactive
-  is muted, active is ink. A count pill (`999px`, azure-tinted) rides the Code tab.
-- **Top bar:** Glass, `blur(10px)`, hairline bottom border. Brand cluster left, status chips right.
-  No nav links — the whole app is one screen.
+- **Tabs:** real `role="tablist"` text tabs; the active tab is `ink` over a `surface` fill with an
+  `accent` underline, inactive is `ink-soft`. A mono count pill rides the Code tab. Both panels stay
+  mounted (`hidden` toggles) so the live preview iframe never tears down on tab switch.
+- **Top bar:** solid `surface`, hairline bottom border, `--shadow-sm`. Castle mark + solid wordmark
+  left; the run-config chip rail right. No nav links — the whole app is one screen.
 
-### Signature Component — The Activity Feed
-The heart of the product: a vertical stream of typed rows tagged by agent lane. Phase rows carry an
-agent badge; tool rows are indented and mono-set (Learn/MCP rows tinted violet); validation rows go
-green (ok) or sand (warn); error rows go red; the user's message is a right-aligned azure→violet
-gradient bubble with a chat tail (`14px 14px 4px 14px`). A three-dot `blink` typing indicator shows
-the active agent thinking. This component *is* the "show, don't tell" thesis — design every change
-to keep it legible and lane-tagged.
+### Signature Component — The Build Transcript
+The heart of the product: an `aria-live` `<ol role="log">` rendered as a genuine engineering log. A
+timeline **spine** runs down the left; each row hangs a lane-colored **marker** (a dot, a spinning
+loader while a tool runs, a check when it lands). Phase rows carry an agent badge and a plain-language
+title; **tool rows are mono** and indented (Learn/MCP rows tinted violet); the validation row goes
+green ("the app is green") or amber (an issue being self-healed); errors go red; the user's turn is a
+left-aligned blue-washed bubble. The list auto-follows only when the reader is already pinned to the
+bottom, so scrolling back to inspect a step is never yanked away. This component *is* the "show,
+don't tell" thesis — design every change to keep it legible, lane-tagged, and honest.
 
-## 6. Do's and Don'ts
+## 6. Accessibility
+
+Target **WCAG 2.1 AA**, and the palette is built to clear it by construction (verified, not hoped):
+
+- **Text contrast (all AA).** `ink` on paper ≈ **14:1**; `ink-soft` ≈ **7.2:1**; the floor token
+  `ink-faint` ≈ **5.1:1**. Every lane hue used as text (blue/amber/green/violet/red/amber-deep) lands
+  **5.0–6.4:1** on `surface`, and `on-accent` on the Build button ≈ **5.5:1**. There is no
+  near-floor muted gray in this system — the old contrast risk is designed out.
+- **Reduced motion is handled.** A global `prefers-reduced-motion: reduce` block neutralizes every
+  transition and animation, with specific overrides that stop the infinite loaders/blink/pulse/shimmer
+  and settle them to a stable state. Motion is never required to perceive content.
+- **Live region.** The transcript is an `aria-live="polite"` `role="log"`, so screen-reader users
+  perceive streamed progress.
+- **Color is never alone.** Every lane pairs its hue with an SVG icon and a text label.
+- **Keyboard.** One coherent, visible `:focus-visible` ring across all controls; the composer submits
+  on Enter (Shift+Enter for newline); file rows are real `<button>`s in a `role="listbox"`.
+
+## 7. Do's and Don'ts
 
 ### Do:
-- **Do** keep color semantic: azure = Planner/interactive, sand = Builder, green = Fixer/success,
-  violet = grounding/user, red = error. Pair every colored element with an icon or label.
-- **Do** confine the sand→azure gradient to the wordmark and the primary Build button.
-- **Do** set anything machine-generated (tool summaries, URLs, source) in JetBrains Mono, and human
-  prose in Inter.
-- **Do** build depth from translucency, `backdrop-filter` blur, and 1px hairline borders — flat glass,
-  not shadows.
-- **Do** keep transitions quick and state-conveying (120–200ms): focus, hover, active, reveal.
+- **Do** keep color semantic: blue = Planner/interactive, amber = Builder, green = Fixer/success,
+  violet = grounding, red = error, indigo = the one primary action. Pair every colored element with an
+  icon or label.
+- **Do** set anything machine-generated (tool summaries, URLs, config values, source) in IBM Plex
+  Mono, and human prose in IBM Plex Sans.
+- **Do** build depth from flat opaque surfaces, hairline borders, and the restrained real shadow
+  scale (`sm`/`md`/`lg`).
 - **Do** keep exactly one primary (Build) action on screen at a time; everything else is ghost/icon.
-- **Do** treat muted `#8b95ab` as the contrast risk — verify ≥4.5:1 for any body/label text on its
-  actual surface before shipping.
-- **Do** self-host Inter + JetBrains Mono if cross-machine brand fidelity matters (currently neither
-  webfont is bundled).
+- **Do** use real inline-SVG icons (1.6px stroke, `currentColor`) and the castle mark — never an emoji.
+- **Do** keep transitions quick (120–200ms) and state-conveying, and give every animation a
+  `prefers-reduced-motion` fallback.
+- **Do** keep the empty state varied — the how-it-works timeline + featured starter + mixed chips,
+  never an identical card grid.
 
 ### Don't:
-- **Don't** collapse the agent process into a single chat bubble or a plain LLM text box — the work
-  must stay visible and lane-tagged (*"a plain LLM call returns text… not just a text box"*).
-- **Don't** turn it into a sterile enterprise SaaS dashboard: no identical KPI-card grids, no
-  hero-metric template, no corporate blandness.
-- **Don't** fake or hide the artifact — the Code tab and live preview exist to prove it's real; never
-  mock them, never hide the work to look slicker.
-- **Don't** use `background-clip: text` gradient fill anywhere except the wordmark; never on body,
-  data, or section headings.
-- **Don't** add `border-left`/`border-right` colored stripes on rows, cards, or banners — use full
-  hairline borders and background tints (as the feed already does).
-- **Don't** introduce drop shadows beyond the brand-mark glow and the toast; don't make surfaces
-  "lift" on hover.
-- **Don't** add display or serif fonts, or spend a saturated signal hue (green/red/violet) on
-  decoration.
-- **Don't** ship motion without a `prefers-reduced-motion` fallback (a current gap — close it, don't
-  extend it).
+- **Don't** reach for the dark neon-glass "AI devtool dashboard" reflex — no `backdrop-filter` glass,
+  no radial neon spotlights, no five-accent glow. This is a bright instrument.
+- **Don't** use a gradient anywhere — not the wordmark, not the Build button, not a bubble, not a bg.
+  Emphasis is weight/size/solid-fill/hairline.
+- **Don't** use emoji as iconography — every glyph is a real SVG from the icon set.
+- **Don't** collapse the agent process into a single chat bubble or plain LLM text box — the work must
+  stay a visible, lane-tagged transcript.
+- **Don't** turn it into a sterile SaaS dashboard: no identical KPI-card grids, no hero-metric
+  template.
+- **Don't** fake or hide the artifact — the Code tab and live preview exist to prove it's real.
+- **Don't** add `border-left`/`border-right` colored stripes; use full hairline borders and `*-wash`
+  background tints.
+- **Don't** introduce a warm cream/sand *body* background (the 2026 AI default) — the desk is cool
+  near-white; warmth lives only in the Builder amber.
+- **Don't** add display or serif fonts, or spend a saturated signal hue on decoration.

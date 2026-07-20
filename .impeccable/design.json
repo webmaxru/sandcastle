@@ -1,48 +1,54 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-20T08:34:06+02:00",
+  "generatedAt": "2026-07-20T20:00:00+02:00",
   "title": "Design System: Sandcastle",
   "extensions": {
     "colorMeta": {
-      "azure": { "role": "primary", "displayName": "Azure", "canonical": "#38bdf8" },
-      "sand": { "role": "primary", "displayName": "Sand", "canonical": "#f6c177" },
-      "green": { "role": "secondary", "displayName": "Signal Green", "canonical": "#4ade80" },
-      "violet": { "role": "secondary", "displayName": "Grounding Violet", "canonical": "#a78bfa" },
-      "red": { "role": "tertiary", "displayName": "Error Red", "canonical": "#f87171" },
-      "deep-navy": { "role": "neutral", "displayName": "Deep Navy", "canonical": "#080b12" },
-      "navy-lift": { "role": "neutral", "displayName": "Navy Lift", "canonical": "#0c111c" },
-      "panel-solid": { "role": "neutral", "displayName": "Panel", "canonical": "#101726" },
-      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#e7ecf6" },
-      "muted": { "role": "neutral", "displayName": "Muted Blue-Gray", "canonical": "#8b95ab" }
+      "accent": { "role": "primary", "displayName": "Accent Indigo", "canonical": "#3461c9", "oklch": "oklch(0.52 0.17 264)" },
+      "accent-strong": { "role": "primary", "displayName": "Accent Strong", "canonical": "#254dac", "oklch": "oklch(0.45 0.16 264)" },
+      "planner": { "role": "semantic", "displayName": "Planner Blue", "canonical": "#0065b4", "oklch": "oklch(0.5 0.15 250)" },
+      "builder": { "role": "semantic", "displayName": "Builder Amber", "canonical": "#8d5403", "oklch": "oklch(0.5 0.11 66)" },
+      "fixer": { "role": "semantic", "displayName": "Fixer Green", "canonical": "#007842", "oklch": "oklch(0.5 0.13 156)" },
+      "ground": { "role": "semantic", "displayName": "Grounding Violet", "canonical": "#7444b4", "oklch": "oklch(0.5 0.17 300)" },
+      "danger": { "role": "semantic", "displayName": "Error Red", "canonical": "#c51d28", "oklch": "oklch(0.53 0.2 25)" },
+      "warn": { "role": "semantic", "displayName": "Warn Amber-Deep", "canonical": "#996100", "oklch": "oklch(0.54 0.12 72)" },
+      "paper": { "role": "neutral", "displayName": "Paper (body bg)", "canonical": "#f5f7f9", "oklch": "oklch(0.975 0.004 245)" },
+      "surface": { "role": "neutral", "displayName": "Surface (sheet)", "canonical": "#fdfdfe", "oklch": "oklch(0.995 0.0015 245)" },
+      "surface-2": { "role": "neutral", "displayName": "Surface-2 (recessed)", "canonical": "#edf1f4", "oklch": "oklch(0.955 0.006 245)" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1f2734", "oklch": "oklch(0.27 0.028 262)" },
+      "ink-soft": { "role": "neutral", "displayName": "Ink Soft", "canonical": "#4c535f", "oklch": "oklch(0.44 0.022 262)" },
+      "ink-faint": { "role": "neutral", "displayName": "Ink Faint (AA floor)", "canonical": "#636975", "oklch": "oklch(0.52 0.02 262)" },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#dadee3", "oklch": "oklch(0.9 0.008 250)" }
     },
     "typographyMeta": {
-      "brand": { "displayName": "Brand Wordmark", "purpose": "The 'Sandcastle' wordmark only; gradient-filled, heaviest and tightest type in the app." },
-      "title": { "displayName": "Title", "purpose": "Section and card headings." },
-      "body": { "displayName": "Body", "purpose": "Feed text, prompts, descriptions; compact by design." },
-      "label": { "displayName": "Label", "purpose": "Uppercase key/value chrome on status chips only." },
-      "mono": { "displayName": "Mono", "purpose": "Anything machine-generated: tool summaries, URLs, generated source." }
+      "brand": { "displayName": "Brand Wordmark", "purpose": "The 'Sandcastle' wordmark; solid ink fill beside the castle mark. Never gradient." },
+      "h1": { "displayName": "Onboarding H1", "purpose": "The single empty-state headline; balanced wrap." },
+      "title": { "displayName": "Title", "purpose": "Panel headers, section and card headings." },
+      "body": { "displayName": "Body", "purpose": "Transcript prose, prompts, descriptions." },
+      "label": { "displayName": "Label", "purpose": "Chip keys and small meta; not all-caps by default." },
+      "mono": { "displayName": "Mono", "purpose": "Anything machine-generated: tool summaries, URLs, config values, generated source." }
     },
-    "gradients": [
-      { "name": "brand", "value": "linear-gradient(135deg, #f6c177 0%, #38bdf8 100%)", "purpose": "The sand->azure brand gradient. Scoped to the wordmark and the primary Build button ONLY." },
-      { "name": "user-bubble", "value": "linear-gradient(135deg, rgba(56,189,248,0.18), rgba(167,139,250,0.18))", "purpose": "Fill for the right-aligned user message bubble in the activity feed." },
-      { "name": "bg-spotlights", "value": "radial-gradient(1100px 600px at 12% -8%, rgba(56,189,248,0.14), transparent 60%), radial-gradient(900px 500px at 100% 0%, rgba(246,193,119,0.12), transparent 55%)", "purpose": "The two soft azure/sand spotlights washing the deep-navy body background." }
-    ],
+    "gradients": [],
+    "gradientPolicy": "The No-Gradient Rule: Sandcastle uses no gradient anywhere — not the wordmark, not the Build button, not a bubble, not a background wash. Emphasis is weight, size, solid fill, or a hairline.",
     "shadows": [
-      { "name": "brand-glow", "value": "drop-shadow(0 3px 8px rgba(56,189,248,0.4))", "purpose": "Azure halo under the brand mark only." },
-      { "name": "toast-lift", "value": "0 8px 30px rgba(0,0,0,0.5)", "purpose": "The only true drop shadow; lifts the transient toast above the workspace." }
+      { "name": "shadow-sm", "value": "0 1px 2px oklch(0.5 0.05 262 / 0.07), 0 1px 1px oklch(0.5 0.05 262 / 0.04)", "purpose": "Contact shadow for resting raised controls (Build button, topbar)." },
+      { "name": "shadow-md", "value": "0 2px 8px oklch(0.45 0.06 262 / 0.08), 0 10px 26px oklch(0.45 0.06 262 / 0.07)", "purpose": "Soft lift for the two workspace panels off the paper." },
+      { "name": "shadow-lg", "value": "0 16px 48px oklch(0.4 0.06 262 / 0.16)", "purpose": "Reserved for the transient toast, the one truly floating layer." }
     ],
     "materials": [
-      { "name": "panel-glass", "value": "background: rgba(20,27,43,0.72); backdrop-filter: blur(8px);", "purpose": "The translucent glass workspace panels (left/right)." },
-      { "name": "chrome-glass", "value": "background: rgba(8,11,18,0.6); backdrop-filter: blur(10px);", "purpose": "The top bar chrome." }
+      { "name": "sheet", "value": "background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-md);", "purpose": "Flat opaque white sheets (panels, cards). No translucency, no blur — never glass." },
+      { "name": "recessed", "value": "background: var(--surface-2);", "purpose": "Recessed fills: mono tool rows, code view, skeletons." },
+      { "name": "lane-wash", "value": "color-mix(in oklab, var(--lane) 9%, var(--surface))", "purpose": "Faint per-agent tint behind a badge or bubble; tracks the lane's own hue." }
     ],
     "motion": [
-      { "name": "state-fast", "value": "0.12s", "purpose": "Hover/active transforms on cards and buttons." },
-      { "name": "state-standard", "value": "0.15s", "purpose": "Border-color and background state transitions." },
-      { "name": "reveal", "value": "0.2s ease", "purpose": "Toast rise-in." },
-      { "name": "typing-blink", "value": "1.2s infinite ease-in-out", "purpose": "Three-dot active-agent typing indicator." }
+      { "name": "state-standard", "value": "0.15s ease", "purpose": "Border-color, background, and color state transitions." },
+      { "name": "hover-lift", "value": "0.16s ease", "purpose": "Card/tab hover transform + color." },
+      { "name": "row-in", "value": "0.2s ease-out", "purpose": "New transcript row entrance (staggered by arrival, not uniform)." },
+      { "name": "reduced-motion", "value": "@media (prefers-reduced-motion: reduce) -> all transitions/animations neutralized", "purpose": "Required fallback; infinite loaders/blink/pulse/shimmer settle to a stable state." }
     ],
     "breakpoints": [
-      { "name": "stack", "value": "900px", "purpose": "Below this, the two-pane workspace stacks vertically (left over right)." }
+      { "name": "stack", "value": "920px", "purpose": "Below this, the two-pane workspace stacks vertically (log over proof)." },
+      { "name": "compact", "value": "560px", "purpose": "Phone: file explorer stacks, brand tag hides, tighter padding." }
     ]
   },
   "components": [
@@ -50,86 +56,86 @@
       "name": "Primary Button (Build)",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The one loud control: brand-gradient fill, dark ink text. Exactly one on screen at a time.",
-      "html": "<button class=\"ds-build\">Build</button>",
-      "css": ".ds-build { padding: 0 20px; height: 44px; border: none; border-radius: 12px; font-family: Inter, 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 13.5px; color: #06121f; background: linear-gradient(135deg, #f6c177 0%, #38bdf8 100%); transition: transform 0.12s, filter 0.15s; } .ds-build:hover:not(:disabled) { filter: brightness(1.08); } .ds-build:active:not(:disabled) { transform: scale(0.97); } .ds-build:disabled { opacity: 0.5; cursor: not-allowed; }"
+      "description": "The one loud control: solid indigo fill, near-white text, never wraps. Exactly one on screen at a time.",
+      "html": "<button class=\"ds-build\">Build it</button>",
+      "css": ".ds-build { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 8px; border: 1px solid #254dac; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-weight: 600; font-size: 13.5px; white-space: nowrap; color: #fdfcff; background: #3461c9; box-shadow: 0 1px 2px rgba(31,39,52,0.07); transition: background 0.15s ease; } .ds-build:hover { background: #254dac; } .ds-build:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }"
     },
     {
-      "name": "Ghost Button",
+      "name": "Ghost / Icon Button",
       "kind": "button",
       "refersTo": "button-ghost",
-      "description": "Secondary actions (Share, New app): transparent with a hairline stroke.",
+      "description": "Secondary actions (Share, reload, external): opaque surface with a hairline stroke.",
       "html": "<button class=\"ds-ghost\">Share</button>",
-      "css": ".ds-ghost { padding: 5px 12px; border: 1px solid rgba(255,255,255,0.14); background: transparent; color: #e7ecf6; border-radius: 8px; font-family: Inter, 'Segoe UI', system-ui, sans-serif; font-size: 12px; transition: background 0.15s; } .ds-ghost:hover { background: rgba(255,255,255,0.06); }"
+      "css": ".ds-ghost { padding: 8px 12px; border: 1px solid #dadee3; background: #fdfdfe; color: #1f2734; border-radius: 8px; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 13px; transition: background 0.15s ease, border-color 0.15s ease; } .ds-ghost:hover { background: #edf1f4; }"
     },
     {
-      "name": "Status Chip",
+      "name": "Config Chip",
       "kind": "chip",
       "refersTo": "chip",
-      "description": "Metadata pill with an uppercase muted label and an ink value. Status only, never a control.",
-      "html": "<span class=\"ds-chip\"><span class=\"ds-chip-label\">model</span><span class=\"ds-chip-value\">gpt-4o-mini</span></span>",
-      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; background: rgba(255,255,255,0.03); font-family: Inter, 'Segoe UI', system-ui, sans-serif; font-size: 12px; } .ds-chip-label { color: #8b95ab; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; } .ds-chip-value { color: #e7ecf6; font-weight: 600; }"
+      "description": "Run-config metadata pill: a label-weight key in ink-faint and a MONO value in ink. Status only, never a control.",
+      "html": "<span class=\"ds-chip\"><span class=\"ds-chip-key\">model</span><span class=\"ds-chip-val\">gpt-4.1</span></span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border: 1px solid #dadee3; border-radius: 8px; background: #fdfdfe; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 12px; } .ds-chip-key { color: #636975; font-weight: 600; font-size: 11px; } .ds-chip-val { color: #1f2734; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; }"
     },
     {
       "name": "Agent Badge",
       "kind": "custom",
       "refersTo": "agent-badge",
-      "description": "Icon-led pill in the active agent's hue (azure Planner / sand Builder / green Fixer). The load-bearing signal of the activity feed.",
-      "html": "<span class=\"ds-agent ds-agent-planner\"><span class=\"ds-agent-ico\">🧭</span>Planner</span>",
-      "css": ".ds-agent { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-family: Inter, 'Segoe UI', system-ui, sans-serif; font-size: 11.5px; font-weight: 700; border: 1px solid transparent; } .ds-agent-ico { font-size: 13px; } .ds-agent-planner { color: #38bdf8; background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.35); }"
+      "description": "Icon-led tag in the active agent's hue as legible ink on a faint wash (Planner blue / Builder amber / Fixer green). The load-bearing signal of the build transcript.",
+      "html": "<span class=\"ds-agent ds-agent-planner\"><svg class=\"ds-agent-ico\" aria-hidden=\"true\">…</svg>Planner</span>",
+      "css": ".ds-agent { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 12px; font-weight: 600; border: 1px solid transparent; } .ds-agent-ico { width: 14px; height: 14px; stroke: currentColor; fill: none; } .ds-agent-planner { color: #0065b4; background: color-mix(in oklab, #0065b4 9%, #fdfdfe); border-color: color-mix(in oklab, #0065b4 30%, #dadee3); }"
     },
     {
-      "name": "Prompt Input",
+      "name": "Prompt Composer",
       "kind": "input",
       "refersTo": "input",
-      "description": "The build prompt field: translucent fill, hairline stroke, azure focus border (no glow).",
-      "html": "<textarea class=\"ds-input\" placeholder=\"Describe an app…\"></textarea>",
-      "css": ".ds-input { width: 100%; resize: none; padding: 11px 13px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); color: #e7ecf6; font-family: Inter, 'Segoe UI', system-ui, sans-serif; font-size: 13.5px; line-height: 1.4; outline: none; transition: border-color 0.15s; } .ds-input:focus { border-color: #38bdf8; }"
+      "description": "The build prompt field: opaque surface, hairline stroke, auto-grow, shared accent focus ring. Placeholder is AA ink-faint, not a washed gray.",
+      "html": "<textarea class=\"ds-input\" placeholder=\"Describe an app to build…\"></textarea>",
+      "css": ".ds-input { width: 100%; resize: none; padding: 12px 14px; border-radius: 11px; border: 1px solid #dadee3; background: #fdfdfe; color: #1f2734; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.5; } .ds-input::placeholder { color: #636975; } .ds-input:focus-visible { outline: 2px solid #3461c9; outline-offset: 2px; }"
     },
     {
-      "name": "Gallery Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "Example-gallery card: flat translucent, azure-tinted lift on hover. No shadow.",
-      "html": "<button class=\"ds-card\"><span class=\"ds-card-emoji\">🐍</span><span class=\"ds-card-name\">Neon Snake</span><span class=\"ds-card-prompt\">Retro snake game with a neon theme and a high-score counter.</span></button>",
-      "css": ".ds-card { display: flex; flex-direction: column; gap: 6px; text-align: left; padding: 14px; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; background: rgba(255,255,255,0.02); color: #e7ecf6; cursor: pointer; transition: transform 0.12s, border-color 0.15s, background 0.15s; } .ds-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.14); background: rgba(56,189,248,0.07); } .ds-card-emoji { font-size: 24px; } .ds-card-name { font-weight: 700; font-size: 14px; } .ds-card-prompt { font-size: 11.5px; color: #8b95ab; line-height: 1.4; }"
+      "name": "Transcript Tool Row",
+      "kind": "custom",
+      "refersTo": "transcript-tool-row",
+      "description": "A monospaced tool-call line hung off the timeline spine with a lane marker; grounding (Learn/MCP) rows tint violet.",
+      "html": "<li class=\"ds-trow\"><span class=\"ds-marker\">✓</span><code class=\"ds-tool\">write index.html</code></li>",
+      "css": ".ds-trow { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; } .ds-marker { color: #007842; } .ds-tool { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; color: #1f2734; background: #edf1f4; border-radius: 5px; padding: 2px 6px; overflow-wrap: anywhere; } .ds-trow-ground .ds-tool { color: #7444b4; }"
     }
   ],
   "narrative": {
-    "northStar": "The Lit Control Room",
-    "overview": "Sandcastle is a dark, calm operations surface built to be watched. Deep-navy glass panels, hairline borders, and dense compact type let the frame recede so the live activity inside (agents streaming plans and tool calls, a self-heal loop going green, an app rendering) is the only thing that draws the eye. Color is information, not decoration: each agent owns a hue, and the sand->azure brand gradient appears only in the wordmark and the Build button. Depth is tonal — translucency, backdrop blur, and 1px borders — not shadows. It rejects the plain-LLM-chatbox reflex, the sterile enterprise dashboard, and any magic-black-box polish that would hide the work.",
+    "northStar": "The Build Log",
+    "overview": "Sandcastle is a bright, structural engineering instrument — a build log you can read across a room. Built for a skeptical developer on a phone or a spectator at a booth screen in a bright hall, it is light, high-contrast, and legible on a projector. A two-pane workspace: the left pane is the build transcript (a real timeline with agent lanes and mono tool rows), the right pane is the proof (live preview + real source). Color is information, not decoration: each agent owns a hue rendered as legible ink on light. There is no gradient and one committed indigo accent for the single Build action. Depth is honest — flat opaque surfaces, hairline borders, a restrained real shadow scale. It is a deliberate rejection of the dark neon-glass 'AI devtool dashboard' reflex.",
     "keyCharacteristics": [
-      "Dark, backlit, glass-paneled two-pane workspace; frame recedes, live content leads.",
-      "Semantic per-agent color (azure / sand / green), always paired with icon + label.",
-      "One brand gradient (sand->azure), scoped to wordmark + primary CTA only.",
-      "Flat, tonal depth: translucency + hairline borders + backdrop blur, not shadow ramps.",
-      "Compact fixed-px product scale; Inter for UI, JetBrains Mono for anything real."
+      "Bright drafting-paper two-pane workspace; the frame recedes, the live log leads.",
+      "Semantic per-agent color (blue / amber / green) as legible ink, always paired with icon + label.",
+      "No gradient anywhere; one committed indigo accent reserved for the single Build action.",
+      "Flat opaque surfaces with hairline borders and a restrained real shadow scale — never glass.",
+      "Real inline-SVG icons and a custom castle mark — zero emoji. IBM Plex Sans + IBM Plex Mono, self-hosted."
     ],
     "rules": [
-      { "name": "The One Gradient Rule", "body": "The sand->azure brand gradient appears in exactly two places: the wordmark and the primary Build button. Never as text fill elsewhere, never on body/data, never as a decorative wash.", "section": "colors" },
-      { "name": "The Color-Is-Meaning Rule", "body": "Azure = Planner/interactive, Sand = Builder, Green = Fixer/success, Violet = grounding/user, Red = error. Color signals which agent or state you're looking at, and every colored element also carries an icon or label so meaning survives grayscale and color-blindness.", "section": "colors" },
-      { "name": "The Mono-Means-Real Rule", "body": "Anything machine-generated (tool summaries, URLs, generated source) is set in JetBrains Mono; human prose is set in Inter. The font is a truth signal.", "section": "typography" },
-      { "name": "The Flat-Glass Rule", "body": "Surfaces are flat translucent glass at rest. Convey depth with translucency, blur, and hairline borders, not box-shadow. The brand-mark glow and the toast lift are the whole shadow budget.", "section": "elevation" }
+      { "name": "The No-Gradient Rule", "body": "Sandcastle uses no gradient anywhere — not the wordmark, not the Build button, not a bubble, not a background wash. Emphasis is weight, size, solid fill, or a hairline.", "section": "colors" },
+      { "name": "The Color-Is-Meaning Rule", "body": "Blue = Planner/interactive, Amber = Builder, Green = Fixer/success, Violet = grounding, Red = error, Indigo = the one primary action. Color signals which agent or state you're looking at, and every colored element also carries an icon or label so meaning survives grayscale and color-blindness.", "section": "colors" },
+      { "name": "The Mono-Means-Real Rule", "body": "Anything machine-generated (tool summaries, URLs, config values, generated source) is set in IBM Plex Mono; human prose is set in IBM Plex Sans. The font is a truth signal.", "section": "typography" },
+      { "name": "The Flat-Opaque Rule", "body": "Surfaces are flat and opaque. Convey depth with tone, a hairline border, and a restrained real shadow — never translucency, blur, or glass. To make a surface pop, raise its shadow one step or strengthen its border.", "section": "elevation" }
     ],
     "dos": [
       "Do keep color semantic and pair every colored element with an icon or label.",
-      "Do confine the sand->azure gradient to the wordmark and the Build button.",
-      "Do set machine output in JetBrains Mono and human prose in Inter.",
-      "Do build depth from translucency, backdrop blur, and 1px hairline borders.",
-      "Do keep transitions quick and state-conveying (120-200ms).",
+      "Do set machine output in IBM Plex Mono and human prose in IBM Plex Sans.",
+      "Do build depth from flat opaque surfaces, hairline borders, and the restrained real shadow scale.",
       "Do keep exactly one primary (Build) action on screen at a time.",
-      "Do treat muted #8b95ab as the contrast risk and verify >=4.5:1 on its real surface.",
-      "Do self-host Inter + JetBrains Mono if cross-machine brand fidelity matters."
+      "Do use real inline-SVG icons (1.6px stroke, currentColor) and the castle mark — never an emoji.",
+      "Do give every animation a prefers-reduced-motion fallback.",
+      "Do keep the empty state varied (how-it-works timeline + featured starter + mixed chips), never an identical card grid."
     ],
     "donts": [
+      "Don't reach for the dark neon-glass 'AI devtool dashboard' reflex — no backdrop-filter glass, no radial neon spotlights, no five-accent glow.",
+      "Don't use a gradient anywhere — not the wordmark, the Build button, a bubble, or a background.",
+      "Don't use emoji as iconography; every glyph is a real SVG.",
       "Don't collapse the agent process into a single chat bubble or plain LLM text box.",
-      "Don't turn it into a sterile enterprise SaaS dashboard (KPI-card grids, hero-metric template).",
+      "Don't turn it into a sterile SaaS dashboard (KPI-card grids, hero-metric template).",
       "Don't fake or hide the artifact; the Code tab and live preview prove it's real.",
-      "Don't use background-clip: text gradient fill anywhere except the wordmark.",
-      "Don't add colored border-left/right stripes; use full hairline borders and background tints.",
-      "Don't add drop shadows beyond the brand-mark glow and the toast, or lift surfaces on hover.",
-      "Don't add display/serif fonts or spend a signal hue on decoration.",
-      "Don't ship motion without a prefers-reduced-motion fallback (a current gap)."
+      "Don't add colored border-left/right stripes; use full hairline borders and lane washes.",
+      "Don't introduce a warm cream/sand body background; the desk is cool near-white, warmth lives only in Builder amber.",
+      "Don't add display/serif fonts or spend a signal hue on decoration."
     ]
   }
 }
