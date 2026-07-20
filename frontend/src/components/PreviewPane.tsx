@@ -29,6 +29,10 @@ export function PreviewPane({ src, hasApp, config, onReload }: Props) {
             <Icon name="info" size={14} strokeWidth={1.9} />
             Heads-up — this is a live demo on free tiers
           </div>
+          <p className="limits-lead">
+            Sandcastle builds <b>web frontend apps only</b> — a single <code>index.html</code> of vanilla
+            HTML/CSS/JS that runs entirely in the browser. <b>No backend, no server, no databases.</b>
+          </p>
           <div className="limits-grid">
             <div className="limit-card">
               <div className="limit-title">
@@ -44,13 +48,12 @@ export function PreviewPane({ src, hasApp, config, onReload }: Props) {
             <div className="limit-card">
               <div className="limit-title">
                 <Icon name="globe" size={14} strokeWidth={1.8} />
-                Azure Container Apps · free tier
+                Azure Static Web Apps · free tier
               </div>
               <ul>
-                <li><b>Scales to zero</b> — the first build after an idle period has a short cold start.</li>
-                <li>Modest sandbox (~0.5&nbsp;vCPU / 1&nbsp;GiB) within the monthly free grant (180k&nbsp;vCPU-s, 360k&nbsp;GiB-s, 2M&nbsp;requests).</li>
-                <li><b>{sessions} concurrent</b> build sessions; each one ends after <b>{timeoutMin}&nbsp;min</b>.</li>
-                <li>Builds static apps (HTML/CSS/JS) with up to <b>{fixes} self-heal passes</b> — no databases or long-running servers.</li>
+                <li>A static frontend app is exactly what the SWA <b>free</b> tier hosts — global CDN, free SSL, custom domains, <b>100&nbsp;GB</b> bandwidth/mo.</li>
+                <li>Every build is a drop-in <code>index.html</code> you could publish to SWA free tier as-is (up to <b>250&nbsp;MB</b> per app).</li>
+                <li>This shared demo runs <b>{sessions} builds</b> at a time; each ends after <b>{timeoutMin}&nbsp;min</b>, with up to <b>{fixes} self-heal passes</b>.</li>
               </ul>
             </div>
           </div>

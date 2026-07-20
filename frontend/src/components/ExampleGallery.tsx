@@ -39,6 +39,10 @@ export function ExampleGallery({ onPick }: Props) {
           Describe an app in plain language. Three Copilot agents take it from a plan to a live,
           self-healed build — right here, in the open.
         </p>
+        <p className="onboard-note">
+          <Icon name="monitor" size={13} strokeWidth={1.9} />
+          <span>Every build is a <b>web frontend app</b> — vanilla HTML/CSS/JS that runs in the browser. No backend, no databases.</span>
+        </p>
       </div>
 
       <ol className="how-steps" aria-label="How Sandcastle works">

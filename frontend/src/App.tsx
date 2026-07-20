@@ -185,6 +185,7 @@ export default function App() {
         {config && (
           <div className="runrail" role="group" aria-label="Run configuration">
             <Chip label="model" value={config.model} />
+            <Chip label="builds" value="static frontend" />
             <Chip label="team" value={config.agents.join(' → ')} />
             <Chip
               label="grounding"

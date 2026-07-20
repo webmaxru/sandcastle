@@ -240,6 +240,32 @@
   text-wrap: pretty;
 }
 
+.onboard-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 12px 0 0;
+  padding: 8px 11px;
+  max-width: 60ch;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  background: var(--accent-tint);
+  border: 1px solid color-mix(in oklab, var(--accent) 22%, var(--line));
+  border-radius: var(--r-sm);
+}
+
+.onboard-note svg {
+  color: var(--accent-strong);
+  flex: none;
+  margin-top: 2px;
+}
+
+.onboard-note b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 .how-steps {
   position: relative;
   list-style: none;
@@ -1390,6 +1416,31 @@ kbd {
 .limits-head svg {
   color: var(--warn);
   flex: none;
+}
+
+.limits-lead {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.limits-lead b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.limits-lead code,
+.limit-card li code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-strong);
+  background: var(--accent-tint);
+  padding: 1px 5px;
+  border-radius: var(--r-xs);
 }
 
 .limits-grid {
