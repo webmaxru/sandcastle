@@ -59,6 +59,9 @@ param githubToken string = ''
 @description('Enable per-client rate limiting on the hosted backend.')
 param enableRateLimit bool = true
 
+@description('Optional custom domain for the frontend (e.g. sandcastle.isainative.dev). Added to the backend CORS allow-list. Register it on the Static Web App separately (see docs/custom-domain.md) — a customDomains resource here would fail CI until DNS exists.')
+param frontendCustomDomain string = 'sandcastle.isainative.dev'
+
 var resourceToken = uniqueString(resourceGroup().id)
 var tags = { project: 'sandcastle', 'azd-env-name': namePrefix }
 
@@ -120,7 +123,7 @@ var secrets = concat(
 var baseEnv = [
   { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
   { name: 'SANDCASTLE_RATELIMIT', value: string(enableRateLimit) }
-  { name: 'SANDCASTLE_CORS_ORIGINS', value: 'https://${swa.properties.defaultHostname}' }
+  { name: 'SANDCASTLE_CORS_ORIGINS', value: empty(frontendCustomDomain) ? 'https://${swa.properties.defaultHostname}' : 'https://${swa.properties.defaultHostname},https://${frontendCustomDomain}' }
   { name: 'PORT', value: '8000' }
 ]
 var containerEnv = concat(
