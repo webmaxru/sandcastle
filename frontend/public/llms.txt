@@ -1,0 +1,28 @@
+# Sandcastle
+
+> A live, spectator-friendly showcase where a GitHub Copilot agent team — Planner, Builder and Fixer — plans, builds, runs and self-heals a real app in an isolated sandbox, streaming a live preview you keep steering by chat. It is the reference demo for the GitHub Copilot provider for the Microsoft Agent Framework.
+
+You type "build me a …" and a multi-agent team scaffolds a real static web app (vanilla HTML/CSS/JS), runs it, self-heals its own build errors against a real validator (`node --check` plus asset and `index.html` checks), grounds itself in current Microsoft Learn docs via MCP, and streams every tool call and text delta live, tagged per agent lane. Each session gets its own scratch workspace. The hosted demo runs entirely on Azure free tiers and never consumes a GitHub Copilot seat (BYOK on the free GitHub Models endpoint).
+
+## Product
+
+- [Live demo](https://sandcastle.isainative.dev/): The hosted Sandcastle app. Describe an app and watch the Planner → Builder → Fixer team build and self-heal it in real time. Scale-to-zero backend; the first request may take ~20-30s to cold-start.
+- [Source on GitHub](https://github.com/webmaxru/sandcastle): Full source for the frontend (React 19 + Vite + TypeScript), backend (FastAPI + the Copilot agent team), and Azure infrastructure (Bicep).
+
+## How it works
+
+- Planner → Builder → Fixer: Three personas share one sandboxed `CopilotClient` and run sequentially so every tool call and text delta streams live, tagged by agent lane (Planner = blue, Builder = amber, Fixer = green).
+- Self-healing: A real validator (`node --check` plus asset and `index.html` checks) drives a Fixer loop until the build is green — not vibes, real execution.
+- Grounding: The Microsoft Learn MCP server grounds scaffolding in current documentation.
+- Sessions: Follow-up prompts ("now add dark mode") edit the same app in the same workspace.
+
+## Docs and references
+
+- [GitHub Copilot provider for the Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python): The provider Sandcastle showcases — gives each agent a real, sandboxed computer.
+- [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/): The framework the agents are built on.
+- [GitHub Models](https://github.com/marketplace/models): The free, seat-free model endpoint the hosted demo uses (BYOK).
+- [Microsoft Learn MCP server](https://learn.microsoft.com/en-us/training/support/mcp): The Model Context Protocol server used to ground builds in live docs.
+
+## Author
+
+- [Maxim Salnikov](https://www.linkedin.com/in/webmaxru/): Creator of Sandcastle. Made in Norway.

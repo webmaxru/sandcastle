@@ -1,0 +1,93 @@
+# Sandcastle — full text for AI agents
+
+> A live, spectator-friendly showcase where a GitHub Copilot agent team — Planner, Builder
+> and Fixer — plans, builds, runs and self-heals a real app in an isolated sandbox, streaming
+> a live preview you keep steering by chat.
+
+- Live demo: https://sandcastle.isainative.dev/
+- Source: https://github.com/webmaxru/sandcastle
+- Author: Maxim Salnikov (https://www.linkedin.com/in/webmaxru/), Norway
+- Language: English
+
+---
+
+## What Sandcastle is
+
+Sandcastle is the reference demo for the **GitHub Copilot provider for the Microsoft Agent
+Framework**. You describe an app in plain language, and a multi-agent team — **Planner →
+Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self-heals** its
+own build errors against a real validator, grounds itself in live Microsoft Learn docs via an
+MCP server, and streams a **live preview** you keep iterating on by chat.
+
+Every app it builds is a **static web frontend** — vanilla HTML/CSS/JS with no backend or
+database — so the result can be hosted free on Azure Static Web Apps.
+
+## Why it is different
+
+A plain LLM call returns *text*. The Copilot provider gives each agent a real, sandboxed
+computer, and Sandcastle turns that into a spectator sport:
+
+- Shell execution — agents run, build, and test the app they write.
+- File read/write — agents scaffold the whole project; the UI shows a live file tree and source.
+- URL fetching — pull assets or references from a URL you paste.
+- MCP servers — the Microsoft Learn MCP server grounds scaffolding in current docs.
+- Streaming — a live activity feed shows every tool call, per agent, as it happens.
+- Sessions / memory — "now add dark mode" edits the *same* app.
+- Multi-agent — Planner → Builder → Fixer, each streamed in its own lane.
+- Self-healing — a real validator (`node --check` plus asset checks) drives a Fixer loop until green.
+- Observability — built-in OpenTelemetry to Azure Application Insights.
+
+The "wow" is visible in seconds and instantly shareable: an AI *team* that doesn't just write
+code but runs and debugs it in front of you, then hands you a live, remixable app.
+
+## How it works (architecture)
+
+- Each session gets its own scratch workspace and one shared `CopilotClient`; the three
+  personas share it and run **sequentially** (manual orchestration, not a static workflow
+  graph) so every tool and text delta streams live, tagged by agent lane.
+- Planner (blue) drafts a plan and the user's own turn. Builder (amber) writes the files.
+  Fixer (green) runs validation and self-heal — green arriving is the "money moment".
+- Grounding (violet) rows are Microsoft Learn / MCP tool calls: external knowledge.
+- The self-heal signal is real: `node --check` plus asset and `index.html` presence checks.
+  Validation is never weakened to force a green result.
+- The frontend is a React 19 + Vite + TypeScript single-page app. The backend is FastAPI with
+  the Copilot agent team, exposing HTTP and Server-Sent Events endpoints for the live stream.
+
+## Hosting and cost
+
+- The hosted demo runs entirely on **Azure free tiers**: Static Web Apps (frontend) and
+  Container Apps (backend), with Application Insights for observability.
+- The backend is **scale-to-zero**, so the first request may take ~20-30 seconds to cold-start
+  the agent runtime, then it is fast.
+- Model inference is **BYOK on the free GitHub Models endpoint**, so the public demo **never
+  consumes a GitHub Copilot seat**. It is rate-limited; heavy traffic may hit GitHub Models'
+  free-tier limits.
+
+## Design and accessibility
+
+- Visual North Star: "The Build Log" — a bright, cool drafting-paper light theme where the
+  frame recedes and the live log leads. No gradient; a single committed indigo accent
+  (`#3461c9`) is reserved for the one primary Build action.
+- Per-agent semantic color is used as legible ink: Planner blue, Builder amber, Fixer green,
+  grounding violet, error red. Agent lanes always carry an SVG icon and a text label, so the
+  distinction survives color-blindness and grayscale.
+- Targets WCAG 2.1 AA: text clears AA on every surface; a global `prefers-reduced-motion`
+  block neutralizes all motion; the build transcript is an `aria-live` polite log.
+- Fonts are self-hosted IBM Plex Sans and IBM Plex Mono.
+
+## Key links and references
+
+- Live demo: https://sandcastle.isainative.dev/
+- Source code: https://github.com/webmaxru/sandcastle
+- GitHub Copilot provider for the Microsoft Agent Framework:
+  https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python
+- Microsoft Agent Framework: https://learn.microsoft.com/en-us/agent-framework/
+- GitHub Models (free, seat-free BYOK endpoint): https://github.com/marketplace/models
+- Microsoft Learn MCP server: https://learn.microsoft.com/en-us/training/support/mcp
+- Author (Maxim Salnikov): https://www.linkedin.com/in/webmaxru/
+
+## Note for agents
+
+The interactive app is a client-rendered single-page application and requires JavaScript to
+run. The complete metadata (title, description, Open Graph, JSON-LD) is present in the initial
+HTML, and this file plus /llms.txt provide the readable content and links without executing JS.

@@ -2,14 +2,157 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- Primary meta -->
+    <title>Sandcastle — watch an AI team build, run &amp; self-heal a live app</title>
+    <meta
+      name="description"
+      content="Describe an app and watch a GitHub Copilot agent team — Planner, Builder, Fixer — plan, build, run and self-heal it live in a real sandbox. Free, on Azure."
+    />
+    <link rel="canonical" href="https://sandcastle.isainative.dev/" />
+    <meta name="author" content="Maxim Salnikov" />
     <meta name="theme-color" content="#f5f7f9" />
-    <meta name="description" content="Describe an app. Watch a team of GitHub Copilot agents plan, build, ground in docs, and self-heal it — live, in a sandbox." />
-    <title>Sandcastle — watch an AI team build a running app</title>
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta
+      name="googlebot"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+
+    <!-- Icons & PWA -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Preload the primary UI fonts (self-hosted) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/ibm-plex-sans-latin-600-normal.woff2" crossorigin />
+
+    <!-- Open Graph (LinkedIn / Facebook / Slack / Discord) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sandcastle" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Sandcastle — watch an AI team build, run &amp; self-heal a live app" />
+    <meta
+      property="og:description"
+      content="Describe an app and watch a GitHub Copilot agent team — Planner, Builder, Fixer — plan, build, run and self-heal it live in a real sandbox. Free, on Azure."
+    />
+    <meta property="og:url" content="https://sandcastle.isainative.dev/" />
+    <meta property="og:image" content="https://sandcastle.isainative.dev/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Sandcastle brand mark and wordmark with the tagline 'Watch an AI team plan, build, run and self-heal a real app — live, in a sandbox' and Planner, Builder, Fixer agent lanes."
+    />
+
+    <!-- Twitter / X (no verified handle exists, so site/creator are intentionally omitted) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sandcastle — watch an AI team build, run &amp; self-heal a live app" />
+    <meta
+      name="twitter:description"
+      content="Describe an app and watch a GitHub Copilot agent team — Planner, Builder, Fixer — plan, build, run and self-heal it live in a real sandbox."
+    />
+    <meta name="twitter:image" content="https://sandcastle.isainative.dev/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Sandcastle brand mark and wordmark with the tagline 'Watch an AI team plan, build, run and self-heal a real app — live, in a sandbox'."
+    />
+
+    <!-- Structured data (schema.org) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://sandcastle.isainative.dev/#website",
+            "url": "https://sandcastle.isainative.dev/",
+            "name": "Sandcastle",
+            "description": "A live, spectator-friendly showcase where a GitHub Copilot agent team plans, builds, runs and self-heals a real app in a sandbox.",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://sandcastle.isainative.dev/#maxim" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://sandcastle.isainative.dev/#maxim",
+            "name": "Maxim Salnikov",
+            "url": "https://www.linkedin.com/in/webmaxru/",
+            "sameAs": [
+              "https://www.linkedin.com/in/webmaxru/",
+              "https://github.com/webmaxru"
+            ]
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://sandcastle.isainative.dev/#app",
+            "name": "Sandcastle",
+            "url": "https://sandcastle.isainative.dev/",
+            "description": "Describe an app and a GitHub Copilot multi-agent team — Planner, Builder and Fixer — plans it, writes the files, runs it, and self-heals its own build errors against a real validator, streaming a live preview you keep iterating on by chat. Built on the GitHub Copilot provider for the Microsoft Agent Framework.",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any (modern web browser)",
+            "browserRequirements": "Requires JavaScript.",
+            "inLanguage": "en",
+            "image": "https://sandcastle.isainative.dev/og-image.png",
+            "screenshot": "https://sandcastle.isainative.dev/og-image.png",
+            "isAccessibleForFree": true,
+            "author": { "@id": "https://sandcastle.isainative.dev/#maxim" },
+            "publisher": { "@id": "https://sandcastle.isainative.dev/#maxim" },
+            "isPartOf": { "@id": "https://sandcastle.isainative.dev/#website" },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "keywords": "GitHub Copilot, Microsoft Agent Framework, AI agents, multi-agent, code generation, agentic AI, self-healing, live demo"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <style>
+        .ns { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem;
+          font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+          color: #1f2734; line-height: 1.55; }
+        .ns h1 { font-size: 1.9rem; margin: 0 0 .5rem; letter-spacing: -.02em; }
+        .ns p { color: #4c535f; font-size: 1.05rem; }
+        .ns a { color: #254dac; }
+        .ns ul { color: #4c535f; padding-left: 1.15rem; }
+      </style>
+      <main class="ns">
+        <h1>Sandcastle — watch an AI team build a running app, live</h1>
+        <p>
+          Describe an app and a GitHub Copilot multi-agent team —
+          <strong>Planner</strong>, <strong>Builder</strong> and <strong>Fixer</strong> —
+          plans it, writes the files, runs it, and self-heals its own build errors against a
+          real validator, streaming a live preview you keep iterating on by chat.
+        </p>
+        <p>
+          Sandcastle is a live showcase for the GitHub Copilot provider for the Microsoft
+          Agent Framework. It runs entirely on Azure free tiers.
+        </p>
+        <ul>
+          <li>Real execution — agents run, build, and test the app they write.</li>
+          <li>Browsable source and a live preview: the artifact is real, not vibes.</li>
+          <li>Grounded in current docs via the Microsoft Learn MCP server.</li>
+        </ul>
+        <p>
+          <strong>This app needs JavaScript to run interactively.</strong>
+          Open <a href="https://sandcastle.isainative.dev/">sandcastle.isainative.dev</a> in a
+          modern browser, or read the source on
+          <a href="https://github.com/webmaxru/sandcastle">GitHub</a>.
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

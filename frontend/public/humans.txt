@@ -1,0 +1,13 @@
+/* TEAM */
+  Creator: Maxim Salnikov
+  Contact: https://www.linkedin.com/in/webmaxru/
+  GitHub: https://github.com/webmaxru
+  Location: Norway
+
+/* SITE */
+  Source: https://github.com/webmaxru/sandcastle
+  Built with: GitHub Copilot provider for the Microsoft Agent Framework,
+              React 19 + Vite (frontend), FastAPI (backend)
+  Hosting: Azure Static Web Apps + Azure Container Apps (free tiers)
+  Fonts: IBM Plex Sans + IBM Plex Mono (self-hosted)
+  Language: English
