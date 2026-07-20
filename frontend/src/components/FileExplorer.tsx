@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { FileEntry } from '../types'
 import { getFileContent } from '../api'
 import { Icon, type IconName } from './icons'
+import { track } from '../analytics'
 
 interface Props {
   sessionId: string | null
@@ -82,7 +83,10 @@ export function FileExplorer({ sessionId, files }: Props) {
               role="option"
               aria-selected={selected === f.path}
               className={`file-row ${selected === f.path ? 'is-active' : ''}`}
-              onClick={() => setSelected(f.path)}
+              onClick={() => {
+                track('file_select', { ext: f.path.split('.').pop() ?? '' })
+                setSelected(f.path)
+              }}
             >
               <Icon name={iconFor(f.path)} size={15} strokeWidth={1.7} />
               <span className="file-name">{f.path}</span>

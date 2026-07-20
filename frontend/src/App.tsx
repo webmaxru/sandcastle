@@ -15,6 +15,7 @@ import { PreviewPane } from './components/PreviewPane'
 import { PromptBar } from './components/PromptBar'
 import { Chip } from './components/Badges'
 import { Icon, Logo } from './components/icons'
+import { track } from './analytics'
 
 let _seq = 0
 const uid = () => `a${Date.now()}_${_seq++}`
@@ -45,7 +46,10 @@ export default function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const q = params.get('prompt')
-    if (q) setInitialPrompt(q)
+    if (q) {
+      setInitialPrompt(q)
+      track('opened_via_shared_link')
+    }
     // DEV-only: seed a mock transcript for screenshots. Stripped from production builds.
     if (import.meta.env.DEV && params.has('demo')) {
       setActivities(demoActivities())
@@ -68,6 +72,7 @@ export default function App() {
       setBuilding(true)
       buildStartRef.current = Date.now()
       lastPromptRef.current = prompt
+      track('build_started', { mode: sessionId ? 'refine' : 'first', prompt_length: prompt.length })
       setActivities((prev) => [...prev, { key: uid(), kind: 'user', text: prompt }])
 
       try {
@@ -111,6 +116,7 @@ export default function App() {
         return
       case 'done':
         setHasApp(!!ev.preview)
+        track('build_done', { has_app: !!ev.preview })
         if (ev.preview) {
           setPreviewVersion((v) => v + 1)
           setTab('preview')
@@ -125,10 +131,12 @@ export default function App() {
   }
 
   const handleStop = useCallback(() => {
+    track('build_stopped')
     abortRef.current?.abort()
   }, [])
 
   const handleNewApp = useCallback(async () => {
+    track('new_app')
     abortRef.current?.abort()
     const id = sessionId
     setSessionId(null)
@@ -142,6 +150,7 @@ export default function App() {
   }, [sessionId])
 
   const goHome = useCallback(() => {
+    track('go_home')
     abortRef.current?.abort()
     const id = sessionId
     setSessionId(null)
@@ -159,6 +168,7 @@ export default function App() {
   }, [sessionId])
 
   const handleShare = useCallback(() => {
+    track('share_link')
     const p = lastPromptRef.current
     const url = `${window.location.origin}${window.location.pathname}${
       p ? `?prompt=${encodeURIComponent(p)}` : ''
@@ -211,7 +221,10 @@ export default function App() {
                   type="checkbox"
                   className="dev-toggle-input"
                   checked={devMode}
-                  onChange={(e) => setDevMode(e.target.checked)}
+                  onChange={(e) => {
+                    track('dev_mode_toggle', { on: e.target.checked })
+                    setDevMode(e.target.checked)
+                  }}
                 />
                 <span className="dev-toggle-track" aria-hidden="true"><span className="dev-toggle-thumb" /></span>
                 <span className="dev-toggle-text">
@@ -269,7 +282,10 @@ export default function App() {
               aria-selected={tab === 'preview'}
               aria-controls="panel-preview"
               className={tab === 'preview' ? 'tab is-active' : 'tab'}
-              onClick={() => setTab('preview')}
+              onClick={() => {
+                track('result_tab', { tab: 'preview' })
+                setTab('preview')
+              }}
             >
               <Icon name="monitor" size={15} strokeWidth={1.8} />
               Live preview
@@ -280,7 +296,10 @@ export default function App() {
               aria-selected={tab === 'code'}
               aria-controls="panel-code"
               className={tab === 'code' ? 'tab is-active' : 'tab'}
-              onClick={() => setTab('code')}
+              onClick={() => {
+                track('result_tab', { tab: 'code' })
+                setTab('code')
+              }}
             >
               <Icon name="file-code" size={15} strokeWidth={1.8} />
               Code
@@ -335,6 +354,7 @@ export default function App() {
             href="https://github.com/webmaxru/sandcastle"
             target="_blank"
             rel="noreferrer"
+            onClick={() => track('outbound_click', { target: 'github' })}
           >
             <Icon name="code" size={13} strokeWidth={1.8} />
             GitHub repo
@@ -342,7 +362,7 @@ export default function App() {
           <span className="footer-dot" aria-hidden="true">·</span>
           <span className="footer-made">
             Made in Norway <span aria-hidden="true">🇳🇴</span> by{' '}
-            <a className="footer-link" href="https://www.linkedin.com/in/webmaxru/" target="_blank" rel="noreferrer">
+            <a className="footer-link" href="https://www.linkedin.com/in/webmaxru/" target="_blank" rel="noreferrer" onClick={() => track('outbound_click', { target: 'linkedin' })}>
               Maxim Salnikov
             </a>
           </span>

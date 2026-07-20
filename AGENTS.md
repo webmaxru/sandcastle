@@ -13,6 +13,9 @@ consistent with the patterns already here.
   - `app/observability.py`, `app/ratelimit.py`, `app/config.py`.
   - `scripts/` — proof/e2e scripts (not shipped in the image).
 - `frontend/` — React 19 + Vite + TS SPA.
+  - `src/analytics.ts` — cookieless RUM (Azure App Insights via `@webmaxru/cookieless-insights`,
+    beacon transport). `initAnalytics()` runs once in `main.tsx`; `track()` / `trackTyping()` wire
+    key events. See [`docs/analytics.md`](docs/analytics.md).
 - `infra/` — `main.bicep` (SWA + ACA + App Insights, free tiers).
 - `.github/workflows/` — `deploy.yml` (deploy‑on‑push) + `ci.yml`.
 
@@ -55,6 +58,11 @@ python backend/scripts/e2e_http.py              # end-to-end build via the API
   New limits follow the same opt‑in pattern.
 - **Console output is UTF‑8.** Test scripts call `sys.stdout.reconfigure(encoding="utf-8")`
   (Windows cp1252 otherwise mangles the ✓/🔎 glyphs).
+- **Frontend RUM connection string is a repo VARIABLE, not a secret.**
+  `VITE_APPINSIGHTS_CONNECTION_STRING` is a public client‑side ingestion key; it's injected at
+  build time (repo variable in CI, `.env` locally) and must **never** be a repo secret or committed
+  as source. RUM data goes to a dedicated `sandcastle-ai` / `sandcastle-law` (0.16 GB/day cap) in
+  `rg-sandcastle`, separate from the backend's server‑side App Insights. See `docs/analytics.md`.
 - **Never commit** an npm `strict-ssl` workaround (the local npm→registry TLS block is
   machine‑specific; CI builds the full image fine) or any secret/token.
 

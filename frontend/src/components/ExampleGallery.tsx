@@ -1,5 +1,6 @@
 import { AGENTS } from './agents'
 import { Icon, type IconName } from './icons'
+import { track } from '../analytics'
 
 interface Props {
   onPick: (prompt: string) => void
@@ -65,7 +66,13 @@ export function ExampleGallery({ onPick }: Props) {
       <div className="starters">
         <div className="starters-head">Start from a prompt</div>
 
-        <button className="starter starter-featured" onClick={() => onPick(FEATURED.prompt)}>
+        <button
+          className="starter starter-featured"
+          onClick={() => {
+            track('example_pick', { name: FEATURED.name, featured: true })
+            onPick(FEATURED.prompt)
+          }}
+        >
           <span className="starter-icon starter-icon-ground">
             <Icon name={FEATURED.icon} size={20} strokeWidth={1.7} />
           </span>
@@ -81,7 +88,15 @@ export function ExampleGallery({ onPick }: Props) {
 
         <div className="starter-chips">
           {STARTERS.map((s) => (
-            <button key={s.name} className="starter-chip" onClick={() => onPick(s.prompt)} title={s.prompt}>
+            <button
+              key={s.name}
+              className="starter-chip"
+              onClick={() => {
+                track('example_pick', { name: s.name, featured: false })
+                onPick(s.prompt)
+              }}
+              title={s.prompt}
+            >
               <Icon name={s.icon} size={15} strokeWidth={1.7} />
               {s.name}
             </button>

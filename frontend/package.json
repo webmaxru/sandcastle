@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "analytics:report": "cookieless-insights report --resource-group rg-sandcastle --app-insights sandcastle-ai --days 30 --open"
   },
   "dependencies": {
+    "@webmaxru/cookieless-insights": "^0.1.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

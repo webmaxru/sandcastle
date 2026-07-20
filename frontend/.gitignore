@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local env files — the RUM connection string is injected at build time
+# (repo variable in CI), never committed as source. Keep the template.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

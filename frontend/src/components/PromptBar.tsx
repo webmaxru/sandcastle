@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from './icons'
+import { trackTyping } from '../analytics'
 
 interface Props {
   onSubmit: (prompt: string) => void
@@ -61,7 +62,10 @@ export function PromptBar({ onSubmit, onStop, building, hasSession, initial }: P
         rows={1}
         value={value}
         placeholder={placeholder}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setValue(e.target.value)
+          trackTyping('composer')
+        }}
         onKeyDown={onKeyDown}
         spellCheck={false}
         aria-describedby="composer-hint"

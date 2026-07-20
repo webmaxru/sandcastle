@@ -1,5 +1,6 @@
 import { Icon } from './icons'
 import type { AppConfig } from '../types'
+import { track } from '../analytics'
 
 interface Props {
   src: string | null
@@ -70,7 +71,7 @@ export function PreviewPane({ src, hasApp, config, onReload }: Props) {
           <span className="proof-url-text">app preview · localhost</span>
         </span>
         <div className="proof-actions">
-          <button className="icon-btn" onClick={onReload} aria-label="Reload preview" title="Reload">
+          <button className="icon-btn" onClick={() => { track('preview_reload'); onReload() }} aria-label="Reload preview" title="Reload">
             <Icon name="reload" size={15} strokeWidth={1.8} />
           </button>
           <a
@@ -78,6 +79,7 @@ export function PreviewPane({ src, hasApp, config, onReload }: Props) {
             href={src}
             target="_blank"
             rel="noreferrer"
+            onClick={() => track('preview_open_newtab')}
             aria-label="Open preview in a new tab"
             title="Open in new tab"
           >

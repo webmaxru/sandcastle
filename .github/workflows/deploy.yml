@@ -91,6 +91,9 @@ jobs:
         working-directory: frontend
         env:
           VITE_API_BASE: ${{ vars.BACKEND_URL }}
+          # Public client-side Application Insights ingestion key (cookieless
+          # RUM). A repo VARIABLE, not a secret — safe to embed in the bundle.
+          VITE_APPINSIGHTS_CONNECTION_STRING: ${{ vars.VITE_APPINSIGHTS_CONNECTION_STRING }}
         run: |
           npm ci
           npm run build
