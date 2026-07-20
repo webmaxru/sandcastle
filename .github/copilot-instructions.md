@@ -3,6 +3,7 @@
 - By default, after building, host on Azure using free tiers of either Azure Static Webapps or Azure Container Apps
 - In case of internet connection failure, try again in 5 minutes
 - If possible, use JavaScript based frameworks and libraries both for frontend and backend
+- In every app's footer, add "Made in Norway by Maxim Salnikov" linking to https://www.linkedin.com/in/webmaxru/ and a link to the project's GitHub repository
 
 ---
 

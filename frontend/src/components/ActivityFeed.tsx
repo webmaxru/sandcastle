@@ -136,5 +136,49 @@ const ActivityRow = memo(function ActivityRow({ a }: { a: Activity }) {
     )
   }
 
+  if (a.kind === 'usage') {
+    return (
+      <li className="trow trow-usage">
+        <span className="marker marker-dev">
+          <Icon name="info" size={13} strokeWidth={1.8} />
+        </span>
+        <div className="tbody">
+          <div className="usage-line">
+            <span className="usage-tag">usage</span>
+            {a.model && <span className="usage-kv"><b>model</b> {a.model}</span>}
+            {a.inTok != null && <span className="usage-kv"><b>in</b> {a.inTok}</span>}
+            {a.outTok != null && <span className="usage-kv"><b>out</b> {a.outTok}</span>}
+            {a.cacheTok ? <span className="usage-kv"><b>cache</b> {a.cacheTok}</span> : null}
+            {a.durationMs != null && <span className="usage-kv"><b>{a.durationMs}ms</b></span>}
+            {a.finish && <span className="usage-kv"><b>finish</b> {a.finish}</span>}
+            {a.cost != null && <span className="usage-kv"><b>${a.cost.toFixed(4)}</b></span>}
+          </div>
+        </div>
+      </li>
+    )
+  }
+
+  if (a.kind === 'debug') {
+    return (
+      <li className="trow trow-debug">
+        <span className="marker marker-dev">
+          <Icon name="braces" size={12} strokeWidth={1.9} />
+        </span>
+        <div className="tbody">
+          <code className="debug-line">
+            <span className="debug-t">+{a.t ?? 0}ms</span>
+            <span className={`debug-type dt-${a.dtype}`}>{a.dtype}</span>
+            {a.agent && <span className="debug-agent">{a.agent}</span>}
+            {a.dtype === 'text' ? (
+              <span className="debug-raw">Δ {a.dcount} chars streamed</span>
+            ) : (
+              a.raw && <span className="debug-raw">{a.raw}</span>
+            )}
+          </code>
+        </div>
+      </li>
+    )
+  }
+
   return null
 })

@@ -31,9 +31,16 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [initialPrompt, setInitialPrompt] = useState('')
+  const [devMode, setDevMode] = useState(false)
 
   const abortRef = useRef<AbortController | null>(null)
   const lastPromptRef = useRef('')
+  const devModeRef = useRef(false)
+  const buildStartRef = useRef(0)
+
+  useEffect(() => {
+    devModeRef.current = devMode
+  }, [devMode])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -59,6 +66,7 @@ export default function App() {
       if (building) return
       setError(null)
       setBuilding(true)
+      buildStartRef.current = Date.now()
       lastPromptRef.current = prompt
       setActivities((prev) => [...prev, { key: uid(), kind: 'user', text: prompt }])
 
@@ -94,6 +102,9 @@ export default function App() {
   )
 
   function applyStreamEvent(ev: SseEvent) {
+    if (devModeRef.current) {
+      setActivities((prev) => appendDebug(prev, ev, buildStartRef.current))
+    }
     switch (ev.type) {
       case 'files':
         setFiles(ev.files ?? [])
@@ -130,6 +141,23 @@ export default function App() {
     if (id) deleteSession(id).catch(() => undefined)
   }, [sessionId])
 
+  const goHome = useCallback(() => {
+    abortRef.current?.abort()
+    const id = sessionId
+    setSessionId(null)
+    setActivities([])
+    setFiles([])
+    setHasApp(false)
+    setBuilding(false)
+    setError(null)
+    setTab('preview')
+    setInitialPrompt('')
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+    if (id) deleteSession(id).catch(() => undefined)
+  }, [sessionId])
+
   const handleShare = useCallback(() => {
     const p = lastPromptRef.current
     const url = `${window.location.origin}${window.location.pathname}${
@@ -147,13 +175,13 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <div className="brand">
+        <button className="brand" onClick={goHome} title="Back to home — resets the current session" aria-label="Sandcastle — back to home">
           <Logo size={30} className="brand-logo" />
           <div className="brand-text">
             <h1 className="wordmark">Sandcastle</h1>
             <p className="brand-tag">An AI team builds, runs &amp; self-heals a live app — watch it happen.</p>
           </div>
-        </div>
+        </button>
         {config && (
           <div className="runrail" role="group" aria-label="Run configuration">
             <Chip label="model" value={config.model} />
@@ -176,20 +204,35 @@ export default function App() {
               <Icon name="code" size={15} strokeWidth={1.8} />
               Build log
             </span>
-            {(started || sessionId) && (
-              <div className="panel-actions">
-                <button className="ghost-btn" onClick={handleShare}>
-                  <Icon name="link" size={14} strokeWidth={1.8} />
-                  Share
-                </button>
-                {sessionId && (
-                  <button className="ghost-btn" onClick={handleNewApp}>
-                    <Icon name="plus" size={14} strokeWidth={1.9} />
-                    New app
+            <div className="panel-actions">
+              <label className="dev-toggle" title="Stream raw agent telemetry into the log: tokens, tool arguments, timings, and every event.">
+                <input
+                  type="checkbox"
+                  className="dev-toggle-input"
+                  checked={devMode}
+                  onChange={(e) => setDevMode(e.target.checked)}
+                />
+                <span className="dev-toggle-track" aria-hidden="true"><span className="dev-toggle-thumb" /></span>
+                <span className="dev-toggle-text">
+                  <Icon name="braces" size={13} strokeWidth={1.9} />
+                  Developer mode
+                </span>
+              </label>
+              {(started || sessionId) && (
+                <>
+                  <button className="ghost-btn" onClick={handleShare}>
+                    <Icon name="link" size={14} strokeWidth={1.8} />
+                    Share
                   </button>
-                )}
-              </div>
-            )}
+                  {sessionId && (
+                    <button className="ghost-btn" onClick={handleNewApp}>
+                      <Icon name="plus" size={14} strokeWidth={1.9} />
+                      New app
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
 
           <div className="panel-body">
@@ -255,6 +298,7 @@ export default function App() {
               <PreviewPane
                 src={previewSrc}
                 hasApp={hasApp}
+                config={config}
                 onReload={() => setPreviewVersion((v) => v + 1)}
               />
             </div>
@@ -279,10 +323,28 @@ export default function App() {
       )}
 
       <footer className="footer">
-        <span>
+        <span className="footer-powered">
           Powered by the <strong>GitHub Copilot</strong> provider for the{' '}
           <strong>Microsoft Agent Framework</strong>
           {config && <> · {config.auth_mode.toUpperCase()} mode</>}
+        </span>
+        <span className="footer-credits">
+          <a
+            className="footer-link"
+            href="https://github.com/webmaxru/sandcastle"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Icon name="code" size={13} strokeWidth={1.8} />
+            GitHub repo
+          </a>
+          <span className="footer-dot" aria-hidden="true">·</span>
+          <span className="footer-made">
+            Made in Norway <span aria-hidden="true">🇳🇴</span> by{' '}
+            <a className="footer-link" href="https://www.linkedin.com/in/webmaxru/" target="_blank" rel="noreferrer">
+              Maxim Salnikov
+            </a>
+          </span>
         </span>
       </footer>
     </div>
@@ -339,6 +401,54 @@ function reduceActivity(prev: Activity[], ev: SseEvent): Activity[] {
 function finalizeRunning(prev: Activity[]): Activity[] {
   if (!prev.some((a) => a.running)) return prev
   return prev.map((a) => (a.running ? { ...a, running: false, ok: false } : a))
+}
+
+/** Developer mode: append a raw trace / telemetry row for a streamed event. */
+function appendDebug(prev: Activity[], ev: SseEvent, start: number): Activity[] {
+  const t = start ? Date.now() - start : 0
+  if (ev.type === 'usage') {
+    return [
+      ...prev,
+      {
+        key: uid(),
+        kind: 'usage',
+        t,
+        model: ev.model,
+        inTok: ev.input_tokens,
+        outTok: ev.output_tokens,
+        cacheTok: ev.cache_read_tokens,
+        cost: ev.cost,
+        durationMs: ev.duration_ms,
+        finish: ev.finish_reason,
+      },
+    ]
+  }
+  if (ev.type === 'text') {
+    // Coalesce token-by-token text deltas into a single growing counter row.
+    const last = prev[prev.length - 1]
+    const n = ev.text?.length ?? 0
+    if (last && last.kind === 'debug' && last.dtype === 'text' && last.agent === ev.agent) {
+      return [...prev.slice(0, -1), { ...last, dcount: (last.dcount ?? 0) + n }]
+    }
+    return [...prev, { key: uid(), kind: 'debug', dtype: 'text', agent: ev.agent, t, dcount: n }]
+  }
+  return [...prev, { key: uid(), kind: 'debug', dtype: ev.type, agent: ev.agent, t, raw: rawPayload(ev) }]
+}
+
+/** Compact a stream event to its meaningful, defined fields for the raw trace. */
+function rawPayload(ev: SseEvent): string {
+  const clean: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(ev)) {
+    if (k === 'type' || k === 'agent') continue
+    if (v === undefined || v === null) continue
+    if (Array.isArray(v) && v.length === 0) continue
+    clean[k] = v
+  }
+  try {
+    return JSON.stringify(clean)
+  } catch {
+    return String(ev)
+  }
 }
 
 /** DEV-only fixtures for screenshots. Never referenced in production builds. */

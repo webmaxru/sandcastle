@@ -28,8 +28,15 @@ export interface SseEvent {
   error?: string | null
   // text
   text?: string
-  // usage
+  // usage / telemetry (Developer mode)
   model?: string | null
+  input_tokens?: number
+  output_tokens?: number
+  cache_read_tokens?: number
+  finish_reason?: string
+  reasoning_effort?: string
+  cost?: number
+  duration_ms?: number
   // validation
   attempt?: number
   issues?: string[]
@@ -63,7 +70,7 @@ export interface AppConfig {
 /** A single rendered item in the activity feed. */
 export interface Activity {
   key: string
-  kind: 'phase' | 'tool' | 'text' | 'validation' | 'error' | 'status' | 'user'
+  kind: 'phase' | 'tool' | 'text' | 'validation' | 'error' | 'status' | 'user' | 'debug' | 'usage'
   agent?: AgentLane
   label?: string
   tool?: string
@@ -73,4 +80,17 @@ export interface Activity {
   text?: string
   issues?: string[]
   green?: boolean
+  // debug trace row
+  t?: number
+  dtype?: string
+  raw?: string
+  dcount?: number
+  // usage telemetry row
+  model?: string | null
+  inTok?: number
+  outTok?: number
+  cacheTok?: number
+  cost?: number
+  durationMs?: number
+  finish?: string
 }

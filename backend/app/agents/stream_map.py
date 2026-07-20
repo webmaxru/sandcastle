@@ -71,7 +71,21 @@ def sse_events_from_update(update: Any) -> list[dict[str, Any]]:
             "error": error_text(getattr(data, "error", None)),
         }]
     if dname == "AssistantUsageData":
-        return [{"type": "usage", "model": getattr(data, "model", None)}]
+        ev: dict[str, Any] = {"type": "usage", "model": getattr(data, "model", None)}
+        for key in ("input_tokens", "output_tokens", "cache_read_tokens", "finish_reason", "reasoning_effort"):
+            val = getattr(data, key, None)
+            if val is not None:
+                ev[key] = val
+        cost = getattr(data, "cost", None)
+        if cost is not None:
+            ev["cost"] = cost
+        duration = getattr(data, "duration", None)
+        if duration is not None:
+            try:
+                ev["duration_ms"] = int(duration.total_seconds() * 1000)
+            except (AttributeError, TypeError):
+                pass
+        return [ev]
     if text:
         return [{"type": "text", "text": text}]
     return []
