@@ -53,3 +53,24 @@ the **de-risk-first** (Phase 0) and **verify-before-advancing** discipline.
 2. Implement the thinnest version that can satisfy the gate.
 3. Write/keep a proof (smoke / e2e / headless script) and run it.
 4. Only when green: commit, push (if deploy-on-push), update the plan, then move to the next phase.
+
+---
+
+## Design Context (impeccable)
+
+This repo is set up for the **impeccable** design skill. Two root docs govern frontend design work
+and are read by every impeccable command before it acts:
+
+- **`PRODUCT.md`** (strategic): register = **product**, target users, purpose, brand personality
+  ("playful, credible, live"), anti-references, and 5 design principles (lead: *show, don't tell*).
+- **`DESIGN.md`** (visual, Stitch format): the real token system — North Star *"The Lit Control
+  Room"*, the dark backlit-glass palette, per-agent semantic color (azure Planner / sand Builder /
+  green Fixer / violet grounding / red error), the one sand→azure brand gradient (wordmark + Build
+  button only), flat tonal elevation, Inter + JetBrains Mono. `.impeccable/design.json` is its
+  machine-readable sidecar.
+
+When changing anything under `frontend/`, follow `DESIGN.md`'s Do's and Don'ts. Live-mode is
+pre-configured (`.impeccable/live/config.json` → injects into `frontend/index.html`). Known design
+gaps to close (from PRODUCT.md accessibility): no `prefers-reduced-motion` fallback yet, and muted
+`#8b95ab` text sits near the contrast floor. Run `/impeccable audit frontend` or
+`/impeccable critique frontend/src/App.tsx` to work these.
