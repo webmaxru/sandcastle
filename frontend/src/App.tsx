@@ -84,6 +84,10 @@ export default function App() {
       } finally {
         setBuilding(false)
         abortRef.current = null
+        // Defensive: if a stream ends without the matching tool_end events
+        // (network drop, aborted build, or a server-side truncation), clear any
+        // lingering "running" rows so the feed never spins forever.
+        setActivities((prev) => finalizeRunning(prev))
       }
     },
     [building, sessionId],
@@ -329,6 +333,12 @@ function reduceActivity(prev: Activity[], ev: SseEvent): Activity[] {
     default:
       return prev
   }
+}
+
+/** Clear any still-"running" tool rows when a build stream ends without their tool_end. */
+function finalizeRunning(prev: Activity[]): Activity[] {
+  if (!prev.some((a) => a.running)) return prev
+  return prev.map((a) => (a.running ? { ...a, running: false, ok: false } : a))
 }
 
 /** DEV-only fixtures for screenshots. Never referenced in production builds. */

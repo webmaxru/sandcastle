@@ -81,7 +81,10 @@ async def build(sid: str, req: BuildRequest, request: Request) -> EventSourceRes
                     }),
                 }
                 break
-            yield {"event": ev.get("type", "message"), "data": json.dumps(_cap_event(ev))}
+            # default=str is a belt-and-suspenders guard: even if some future event
+            # carries a non-serializable object, it degrades to its string form instead
+            # of raising and tearing down the entire SSE stream mid-build.
+            yield {"event": ev.get("type", "message"), "data": json.dumps(_cap_event(ev), default=str)}
 
     return EventSourceResponse(event_gen())
 

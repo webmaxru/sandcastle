@@ -27,6 +27,25 @@ def compact_args(args: dict[str, Any] | None) -> dict[str, Any]:
     return {k: args[k] for k in _SUMMARY_KEYS if k in args}
 
 
+def error_text(err: Any) -> str | None:
+    """Coerce a Copilot tool error (e.g. ToolExecutionCompleteError) to a JSON-safe string.
+
+    The Copilot runtime reports a failed tool as a ``ToolExecutionCompleteError``
+    object (``.message`` + optional ``.code``), which is NOT JSON-serializable. Passing
+    it through unchanged made ``json.dumps`` crash the SSE generator and abort the whole
+    build mid-stream. Always return ``None`` or a plain string.
+    """
+    if err is None:
+        return None
+    if isinstance(err, str):
+        return err
+    msg = getattr(err, "message", None)
+    code = getattr(err, "code", None)
+    if msg:
+        return f"{msg} ({code})" if code else str(msg)
+    return str(err)
+
+
 def sse_events_from_update(update: Any) -> list[dict[str, Any]]:
     """Translate an AgentResponseUpdate into zero or more UI activity events."""
     text = getattr(update, "text", "") or ""
@@ -49,7 +68,7 @@ def sse_events_from_update(update: Any) -> list[dict[str, Any]]:
             "type": "tool_end",
             "id": getattr(data, "tool_call_id", ""),
             "success": getattr(data, "success", None),
-            "error": getattr(data, "error", None),
+            "error": error_text(getattr(data, "error", None)),
         }]
     if dname == "AssistantUsageData":
         return [{"type": "usage", "model": getattr(data, "model", None)}]
