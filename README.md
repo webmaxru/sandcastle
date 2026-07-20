@@ -8,7 +8,7 @@
 > Model inference is **BYOK on the free [GitHub Models](https://github.com/marketplace/models) endpoint** — so the demo **never consumes a GitHub Copilot seat**. It's rate‑limited; heavy traffic may hit GitHub Models' free‑tier limits.
 
 Sandcastle is a showcase for the new [**GitHub Copilot provider for Microsoft Agent Framework**](https://learn.microsoft.com/en-us/agent-framework/agents/providers/github-copilot?pivots=programming-language-python).
-You type *“build me a …”*, and a multi‑agent team — **Planner → Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self‑heals** its own build errors, grounds itself in live Microsoft Learn docs, and streams a **live preview** you keep iterating on by chat.
+You type *“build me a …”*, and a multi‑agent team — **Planner → Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self‑heals** its own build errors, grounds itself in live Microsoft Learn docs, and streams a **live preview** you keep iterating on by chat. Every app it builds is a **static web frontend** — vanilla HTML/CSS/JS with no backend or database — so you can host it free on Azure Static Web Apps.
 
 <p align="center">
   <img src="docs/media/demo-live-build.png" alt="Sandcastle building an app live: Planner and Builder lanes on the left, a green validation banner, and the generated app rendering in the live preview on the right" width="900">
@@ -59,7 +59,7 @@ flowchart LR
 Each session gets its **own scratch workspace and `CopilotClient`**; the three personas share it and run sequentially so every tool/text delta streams live, tagged by agent. The Builder keeps an `AgentSession` for conversational iteration. Self‑healing is driven by a **real signal**, not vibes: inline/local JS is run through `node --check`, referenced assets must exist, and there must be a runnable `index.html`.
 
 <p align="center">
-  <img src="docs/media/home.png" alt="Sandcastle home screen with an example gallery and a live-preview panel" width="820">
+  <img src="docs/media/home.png" alt="Sandcastle home screen: the Planner/Builder/Fixer team, a prompt gallery, a 'builds: static frontend' badge, and an honest free-tier limitations panel (GitHub Models inference + Azure Static Web Apps)" width="820">
 </p>
 
 ## Quickstart — run it locally

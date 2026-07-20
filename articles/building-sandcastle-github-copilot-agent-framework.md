@@ -3,7 +3,7 @@
 ### How we built **Sandcastle** on the new GitHub Copilot provider for Microsoft Agent Framework — and what the feature actually unlocks
 
 > **▶️ Live demo:** https://mango-island-0bf66000f.7.azurestaticapps.net &nbsp;·&nbsp; **Source:** https://github.com/webmaxru/sandcastle
-> Running on Azure free tiers (Static Web Apps + Container Apps). Model inference is seat‑free BYOK on the free [GitHub Models](https://github.com/marketplace/models) endpoint.
+> Running on Azure free tiers (Static Web Apps + Container Apps). It builds **frontend‑only static web apps** — vanilla HTML/CSS/JS with no backend or database — the kind of app that drops straight onto SWA's free tier. Model inference is seat‑free BYOK on the free [GitHub Models](https://github.com/marketplace/models) endpoint.
 
 <p align="center">
   <img src="media/why-different.svg" alt="A plain LLM returns text; the GitHub Copilot provider returns actions executed in a real sandbox: shell, files, fetch, MCP, and a running app." width="960">
@@ -14,6 +14,12 @@ Most "AI app" demos boil down to the same thing: a prompt goes in, a wall of tex
 Sandcastle is a showcase for exactly that. You type *"build me a Pomodoro timer with a dark theme"*, and a team of Copilot agents — **Planner → Builder → Fixer** — scaffolds a real app in an isolated sandbox, runs it, **self‑heals its own build errors**, grounds itself in live Microsoft Learn docs, and streams a **live preview** you keep iterating on by chat. Every shell command and file write shows up in a live activity feed, tagged by which agent did it.
 
 This article is a technical deep‑dive on both halves: **what the provider gives you**, and **how Sandcastle is engineered** to turn it into a spectator sport — including the auth model that lets a *public* demo run without ever spending a Copilot seat.
+
+> **📐 Scope, on purpose.** Sandcastle only ever builds **static web _frontend_ apps** — a single `index.html` of vanilla HTML/CSS/JS that runs entirely in the browser, with **no backend, no server processes, and no databases.** That constraint is baked into the agent personas, and it's a feature rather than a shortcut: a static frontend is exactly the workload [**Azure Static Web Apps**' free tier](https://learn.microsoft.com/en-us/azure/static-web-apps/plans) is built for (global CDN, free SSL, custom domains, 100 GB bandwidth/month, 250 MB per app). Anything the demo builds, you can publish for free, as‑is. The demo is upfront about this — and about its inference limits — right on the home screen:
+
+<p align="center">
+  <img src="../docs/media/home.png" alt="Sandcastle home screen: an AI team (Planner, Builder, Fixer), a prompt gallery, a 'builds: static frontend' badge, and an honest free-tier limitations panel covering GitHub Models inference and Azure Static Web Apps." width="960">
+</p>
 
 ---
 
@@ -253,9 +259,12 @@ The build endpoint is a **Server‑Sent Events** stream. Each `AgentResponseUpda
 if dname == "ToolExecutionStartData":
     return [{"type": "tool_start", "tool": tool, "summary": tool_summary(tool, args), ...}]
 if dname == "ToolExecutionCompleteData":
-    return [{"type": "tool_end", "success": data.success, "error": data.error}]
+    return [{"type": "tool_end", "success": data.success, "error": error_text(data.error)}]
 if dname == "AssistantUsageData":
-    return [{"type": "usage", "model": data.model}]
+    return [{"type": "usage", "model": data.model,
+             "input_tokens": data.input_tokens, "output_tokens": data.output_tokens,
+             "cost": data.cost, "finish_reason": data.finish_reason,
+             "duration_ms": int(data.duration.total_seconds() * 1000)}]
 if text:
     return [{"type": "text", "text": text}]
 ```
@@ -304,6 +313,16 @@ The frontend renders these as a live activity feed, a file tree with a source vi
 <p align="center">
   <img src="../docs/media/code-tab.png" alt="Sandcastle showing the generated file tree and source code alongside the running app" width="900">
 </p>
+
+### Developer mode: every token, tool call, and timing
+
+Because the whole build is already a typed event stream, exposing it in full is a toggle, not a rewrite. **Developer mode** (top of the Build log) stops coalescing and streams *every* event into the feed — each one stamped with the elapsed time, the emitting agent, and its raw payload: `status` and `phase` transitions, per‑tool `tool_start`/`tool_end` with arguments, text deltas, and a rich **usage** row per agent turn (model, input/output tokens, cost, duration, `finish_reason`). It turns the demo into a live, inspectable trace of what the Copilot runtime is actually doing.
+
+<p align="center">
+  <img src="../docs/media/devmode.png" alt="Sandcastle in Developer mode: the Build log streams raw, timestamped events — status, phase, per-agent text deltas and token-usage telemetry — while the generated app renders live in the preview on the right." width="960">
+</p>
+
+> One footgun worth calling out: a failed tool's `data.error` is a `ToolExecutionCompleteError` object, **not** a string — `json.dumps` chokes on it and kills the SSE stream mid‑build. The `error_text()` helper coerces it to a string (with a `default=str` guard on the dump) so a broken build streams its error cleanly instead of hanging.
 
 ### Grounding in Microsoft Learn via MCP
 
@@ -412,10 +431,6 @@ flowchart LR
 ```
 
 Scale‑to‑zero has one visible cost: the **first request after idle takes ~20–30s** to cold‑start the agent runtime, then it's fast. A single replica is a deliberate choice — it keeps the in‑memory session map and rate limiter correct without a shared store.
-
-<p align="center">
-  <img src="../docs/media/home.png" alt="Sandcastle home screen with an example gallery and a live-preview panel" width="820">
-</p>
 
 ---
 
