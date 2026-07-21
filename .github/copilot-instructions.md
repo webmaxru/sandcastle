@@ -76,3 +76,37 @@ pre-configured (`.impeccable/live/config.json` → injects into `frontend/index.
 gaps are now closed: text clears WCAG AA on every surface (the floor token `ink-faint` ≈5.1:1), and a
 global `prefers-reduced-motion` block neutralizes all motion. Run `/impeccable audit frontend` or
 `/impeccable critique frontend/src/App.tsx` to keep them that way.
+
+---
+
+## Creating articles
+
+Long-form articles live in `articles/` (e.g. `articles/building-sandcastle-github-copilot-agent-framework.md`).
+
+- **Render every text-based visual as a PNG companion.** When an article is destined for a platform
+  that only supports **simple markdown + attached images** (LinkedIn, most newsletters, many CMSes),
+  render **all** of its text-based illustrations, tables, diagrams (Mermaid or otherwise), and code
+  samples as PNG images into that article's `media/` folder. **Also rasterize any hand-authored `.svg`
+  illustrations to `.png`** — those platforms don't accept SVG.
+- **Never change the article itself.** The `.md` stays the single source of truth and keeps its
+  original fenced code blocks, Markdown tables, Mermaid diagrams and inline SVG. The PNGs are
+  *additional* assets you attach when posting; you do **not** swap the in-article content for images.
+- **Extract each block verbatim by line range** from the `.md` so the rendered PNG can't drift from the
+  prose. Keep filenames meaningful and stable (`mmd-…`, `code-…`, `table-…`, plus the SVG's own name).
+
+**How (reusable tool):** `articles/tools/render-media.mjs` does all of the above — run
+`node articles/tools/render-media.mjs` (optional id-substring filter, e.g. `… mmd-`). It drives the
+local headless Chrome over CDP (Node 22 global `WebSocket`+`fetch`, no Puppeteer) and screenshots a
+`#shot` element at `clip.scale:2` for crisp 2× PNGs, on the article's warm drafting-paper palette with
+self-hosted IBM Plex (`articles/tools/fonts/`). To add blocks or adapt to a new article, edit its
+`RANGES` / `CODE_META` maps. Gotchas already handled in the tool (keep them):
+
+- **Mermaid** loads as ESM from a CDN in the page; theme `base` + palette `themeVariables`. Set
+  `useMaxWidth:false` per diagram type (`flowchart`/`sequence`/`state`/`timeline`) or flowcharts scale
+  down and **subgraph titles wrap and clip**. Keep `htmlLabels:true` so node `<br/>`/`<i>` render, and
+  force cluster titles single-line via CSS `white-space:nowrap;overflow:visible`. Force
+  `text.sequenceNumber{fill:#fff}` or `autonumber` badges are invisible (brown-on-dark-circle).
+  Real Windows Chrome renders the diagrams' color **emoji** natively.
+- **Code** uses highlight.js (CDN ESM) + IBM Plex Mono in an editor-chrome card; **tables** convert
+  inline markdown (`**bold**`, `*italic*`, `` `code` ``, links) to styled HTML.
+- The generator writes throwaway `page-*.html` next to itself and deletes them on exit.
