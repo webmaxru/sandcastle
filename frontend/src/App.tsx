@@ -12,7 +12,7 @@ import { ActivityFeed } from './components/ActivityFeed'
 import { ExampleGallery } from './components/ExampleGallery'
 import { FileExplorer } from './components/FileExplorer'
 import { PreviewPane } from './components/PreviewPane'
-import { PromptBar } from './components/PromptBar'
+import { PromptBar, type PromptBarHandle } from './components/PromptBar'
 import { Chip } from './components/Badges'
 import { Icon, Logo } from './components/icons'
 import { track } from './analytics'
@@ -38,6 +38,7 @@ export default function App() {
   const lastPromptRef = useRef('')
   const devModeRef = useRef(false)
   const buildStartRef = useRef(0)
+  const promptBarRef = useRef<PromptBarHandle>(null)
 
   useEffect(() => {
     devModeRef.current = devMode
@@ -133,6 +134,12 @@ export default function App() {
   const handleStop = useCallback(() => {
     track('build_stopped')
     abortRef.current?.abort()
+  }, [])
+
+  // Picking an example drops its prompt into the composer to edit before building —
+  // it does not auto-send, so the user stays in control of the final request.
+  const handlePickExample = useCallback((prompt: string) => {
+    promptBarRef.current?.setPrompt(prompt)
   }, [])
 
   const handleNewApp = useCallback(async () => {
@@ -251,7 +258,7 @@ export default function App() {
 
           <div className="panel-body">
             {!started ? (
-              <ExampleGallery onPick={handleBuild} />
+              <ExampleGallery onPick={handlePickExample} />
             ) : (
               <ActivityFeed activities={activities} building={building} />
             )}
@@ -265,6 +272,7 @@ export default function App() {
           )}
 
           <PromptBar
+            ref={promptBarRef}
             onSubmit={handleBuild}
             onStop={handleStop}
             building={building}

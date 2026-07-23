@@ -16,9 +16,9 @@ interface Starter {
 const FEATURED: Starter = {
   name: 'Weather dashboard',
   icon: 'globe',
-  desc: 'Grounded in real API docs via Microsoft Learn — current conditions plus a 5-day forecast.',
+  desc: 'Live current conditions and a 5-day forecast from the free, keyless Open-Meteo API — no key, no sign-up.',
   prompt:
-    'A weather dashboard that shows current conditions and a 5-day forecast for a city, using a real public weather API. Ground the API usage in official docs.',
+    "A weather dashboard for any city. Include a search box to look up a city, then show its current conditions (temperature, wind, humidity, and a weather description with a matching icon) plus a 5-day forecast with daily high/low. Use the free, KEYLESS Open-Meteo API — no API key, token, or sign-up: geocode the city name with https://geocoding-api.open-meteo.com/v1/search?name=CITY and fetch weather from https://api.open-meteo.com/v1/forecast requesting current weather plus daily temperature_2m_max/min and weather_code. Map Open-Meteo weather codes to text + icons. Show loading and 'city not found' states, and load a sensible default city on first paint.",
 }
 
 const STARTERS: Starter[] = [
@@ -79,7 +79,7 @@ export function ExampleGallery({ onPick }: Props) {
           <span className="starter-text">
             <span className="starter-name">
               {FEATURED.name}
-              <span className="starter-tag">grounded</span>
+              <span className="starter-tag">live data</span>
             </span>
             <span className="starter-desc">{FEATURED.desc}</span>
           </span>

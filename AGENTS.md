@@ -39,7 +39,15 @@ npm --prefix frontend run build    # tsc -b && vite build (unused vars fail the 
 npm --prefix frontend run lint     # oxlint
 python backend/scripts/ratelimit_http_test.py   # rate-limit HTTP integration
 python backend/scripts/e2e_http.py              # end-to-end build via the API
+python backend/scripts/validate_starters.py     # build every example-gallery starter one-shot
+node   backend/scripts/preview_check.mjs         # headless-verify each built starter actually runs
 ```
+
+- The example-gallery starters (`frontend/src/components/ExampleGallery.tsx`) are validated:
+  `validate_starters.py` builds each in a fresh one-shot session (green, no `finish_reason=length`
+  truncation) and `preview_check.mjs` loads each in headless Chrome (no uncaught JS error; the
+  weather starter must make a live keyless Open-Meteo 200 and render a temperature). Keep the two
+  prompt lists in sync when you add/remove a starter.
 
 - Prefer the **smallest** targeted check that covers your change; only run full suites when needed.
 - Backend has no separate lint step; keep imports tidy and the app importable

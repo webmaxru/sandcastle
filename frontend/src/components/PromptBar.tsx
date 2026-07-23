@@ -1,6 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Icon } from './icons'
 import { trackTyping } from '../analytics'
+
+export interface PromptBarHandle {
+  /** Replace the composer text and focus it for editing — used by the example starters. */
+  setPrompt: (text: string) => void
+}
 
 interface Props {
   onSubmit: (prompt: string) => void
@@ -10,17 +15,33 @@ interface Props {
   initial?: string
 }
 
-export function PromptBar({ onSubmit, onStop, building, hasSession, initial }: Props) {
+export const PromptBar = forwardRef<PromptBarHandle, Props>(function PromptBar(
+  { onSubmit, onStop, building, hasSession, initial },
+  ref,
+) {
   const [value, setValue] = useState(initial ?? '')
-  const ref = useRef<HTMLTextAreaElement>(null)
+  const taRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (initial) setValue(initial)
   }, [initial])
 
+  // Let parents drop a starter prompt into the composer (edit-before-send, no auto-build).
+  useImperativeHandle(ref, () => ({
+    setPrompt(text: string) {
+      setValue(text)
+      requestAnimationFrame(() => {
+        const el = taRef.current
+        if (!el) return
+        el.focus()
+        el.setSelectionRange(text.length, text.length)
+      })
+    },
+  }), [])
+
   // Auto-grow the textarea up to a cap.
   useEffect(() => {
-    const el = ref.current
+    const el = taRef.current
     if (!el) return
     el.style.height = 'auto'
     el.style.height = `${Math.min(el.scrollHeight, 168)}px`
@@ -57,7 +78,7 @@ export function PromptBar({ onSubmit, onStop, building, hasSession, initial }: P
       </label>
       <textarea
         id="composer-input"
-        ref={ref}
+        ref={taRef}
         className="composer-input"
         rows={1}
         value={value}
@@ -88,4 +109,4 @@ export function PromptBar({ onSubmit, onStop, building, hasSession, initial }: P
       </div>
     </form>
   )
-}
+})
